@@ -19,7 +19,7 @@
     tool: 'brush', color: '#e63946', size: 14,
     w: 0, h: 0, alpha: null,           // alpha: line-art opacity per pixel
     source: null, key: null, title: '',// source: {img,isSvg} kept so the cut-off can be re-applied
-    undo: [], redo: []
+    undo: [], redo: [], dirty: false
   };
 
   /* ---------- line art: white -> transparent ---------- */
@@ -48,11 +48,14 @@
   }
 
   function setPage(source, natural, title, key, restore) {
+    flushSave();                                // keep the page we are leaving
     const k = natural.isSvg ? MAX_SIDE / Math.max(natural.w, natural.h)
                             : Math.min(1, MAX_SIDE / Math.max(natural.w, natural.h));
     state.w = Math.max(1, Math.round(natural.w * k));
     state.h = Math.max(1, Math.round(natural.h * k));
-    state.source = source; state.title = title; state.key = key;
+    state.source = source; state.title = title; state.key = key; state.dirty = false;
+    try { if (key) localStorage.setItem('cb:last', key); } catch (e) { /* ignore */ }
+    markActive(key);
     state.undo = []; state.redo = [];
     for (const c of [colorCv, linesCv]) { c.width = state.w; c.height = state.h; }
     cctx.clearRect(0, 0, state.w, state.h);
@@ -112,21 +115,62 @@
     $('redoBtn').disabled = !state.redo.length;
   }
 
+  /* ---------- storage (IndexedDB): uploads and progress ---------- */
+
+  const db = (() => {
+    let opened = null;
+    const open = () => opened || (opened = new Promise((res, rej) => {
+      if (!window.indexedDB) return rej(new Error('IndexedDB unavailable'));
+      const r = indexedDB.open('coloring-book', 1);
+      r.onupgradeneeded = () => { r.result.createObjectStore('uploads', { keyPath: 'id' }); r.result.createObjectStore('progress'); };
+      r.onsuccess = () => res(r.result);
+      r.onerror = () => rej(r.error);
+    }));
+    const run = (store, mode, fn) => open().then((d) => new Promise((res, rej) => {
+      const tx = d.transaction(store, mode), req = fn(tx.objectStore(store));
+      tx.oncomplete = () => res(req && req.result);
+      tx.onerror = tx.onabort = () => rej(tx.error);
+    }));
+    return {
+      get: (store, key) => run(store, 'readonly', (o) => o.get(key)),
+      all: (store) => run(store, 'readonly', (o) => o.getAll()),
+      put: (store, val, key) => run(store, 'readwrite', (o) => (key === undefined ? o.put(val) : o.put(val, key))),
+      del: (store, key) => run(store, 'readwrite', (o) => o.delete(key))
+    };
+  })();
+
   let saveTimer = 0;
   function scheduleSave() {
+    state.dirty = true;
     clearTimeout(saveTimer);
-    saveTimer = setTimeout(() => {
-      if (!state.key) return;                   // uploads are not stored
-      try { localStorage.setItem('cb:' + state.key, colorCv.toDataURL('image/png')); } catch (e) { /* quota/private mode */ }
-    }, 600);
+    saveTimer = setTimeout(flushSave, 600);
   }
-  function restoreProgress(key) {
-    let data = null;
-    try { data = localStorage.getItem('cb:' + key); } catch (e) { /* ignore */ }
-    if (!data) return;
-    const img = new Image();
-    img.onload = () => { if (state.key === key) cctx.drawImage(img, 0, 0, state.w, state.h); };
-    img.src = data;
+  // Only saves after an edit, so a page that is still restoring can never overwrite saved coloring with a blank.
+  function flushSave() {
+    clearTimeout(saveTimer);
+    if (!state.key || !state.dirty) return;
+    const key = state.key;
+    state.dirty = false;
+    colorCv.toBlob((blob) => { if (blob) db.put('progress', blob, key).catch(() => {}); });   // toBlob copies the bitmap immediately
+  }
+  window.addEventListener('pagehide', flushSave);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) flushSave(); });
+
+  async function restoreProgress(key) {
+    let blob = null;
+    try { blob = await db.get('progress', key); } catch (e) { /* storage unavailable */ }
+    if (!blob) {                                // progress saved by the first version lived in localStorage
+      try { const old = localStorage.getItem('cb:' + key); if (old) blob = await (await fetch(old)).blob(); } catch (e) { /* ignore */ }
+    }
+    if (!blob || state.key !== key) return;
+    try {
+      const bmp = await createImageBitmap(blob);
+      if (state.key !== key) return;
+      cctx.save();
+      cctx.globalCompositeOperation = 'destination-over';   // anything drawn while loading stays on top
+      cctx.drawImage(bmp, 0, 0, state.w, state.h);
+      cctx.restore();
+    } catch (e) { /* corrupt entry: start blank */ }
   }
 
   /* ---------- tools ---------- */
@@ -291,18 +335,118 @@
   $('threshold').addEventListener('input', (e) => {
     $('thresholdVal').textContent = e.target.value;
     if (state.source) renderLines();
+    if (state.key && state.key.startsWith('u:')) {
+      const id = state.key.slice(2), cutoff = +e.target.value;
+      clearTimeout(cutTimer);
+      cutTimer = setTimeout(async () => {
+        const rec = mine.find((r) => r.id === id);
+        if (rec) { rec.cutoff = cutoff; try { await db.put('uploads', rec); } catch (err) { /* ignore */ } }
+      }, 400);
+    }
+  });
+  let cutTimer = 0;
+
+  /* ---------- my pictures ---------- */
+
+  const DEFAULT_CAT = 'My Pictures';
+  const NEW_CAT = '__new__';
+  let mine = [];                                // uploaded pictures: {id, name, cat, cutoff, blob, created}
+  let thumbUrls = [];
+  const openers = new Map();                    // page key -> function that opens it
+
+  function refreshCatSelect(selected) {
+    const sel = $('uploadCat');
+    const cats = [...new Set([DEFAULT_CAT, ...mine.map((r) => r.cat)])];
+    if (selected && !cats.includes(selected)) cats.push(selected);
+    sel.innerHTML = '';
+    for (const c of cats) sel.add(new Option(c, c));
+    sel.add(new Option('+ New category…', NEW_CAT));
+    sel.value = selected || DEFAULT_CAT;
+    sel.dataset.prev = sel.value;
+  }
+  $('uploadCat').addEventListener('change', (e) => {
+    const sel = e.target;
+    if (sel.value !== NEW_CAT) { sel.dataset.prev = sel.value; return; }
+    const name = (prompt('Name for the new category:') || '').trim().slice(0, 40);
+    refreshCatSelect(name || sel.dataset.prev);
   });
 
-  function openFile(file) {
-    if (!file || !file.type.startsWith('image/')) return;
-    $('threshold').value = 200; $('thresholdVal').textContent = '200';   // gentler default for photos/scans
-    loadImage(URL.createObjectURL(file), file.name.replace(/\.[^.]+$/, ''), null, file.type === 'image/svg+xml', false, true);
-    document.body.classList.remove('menu');
-    document.querySelectorAll('.thumb.active').forEach((t) => t.classList.remove('active'));
+  function renderMine() {
+    thumbUrls.forEach((u) => URL.revokeObjectURL(u)); thumbUrls = [];
+    const box = $('mine');
+    box.innerHTML = '';
+    const cats = [...new Set(mine.map((r) => r.cat))];
+    for (const cat of cats) {
+      const items = mine.filter((r) => r.cat === cat);
+      const section = document.createElement('details'); section.open = true;
+      const h = document.createElement('summary'); h.textContent = `★ ${cat} (${items.length})`; section.appendChild(h);
+      const grid = document.createElement('div'); grid.className = 'thumbs'; section.appendChild(grid); box.appendChild(section);
+      for (const rec of items) {
+        const wrap = document.createElement('div'); wrap.className = 'thumbwrap';
+        const b = document.createElement('button');
+        b.className = 'thumb'; b.title = rec.name; b.dataset.key = 'u:' + rec.id;
+        b.innerHTML = '<img alt=""><span></span>';
+        const url = URL.createObjectURL(rec.blob); thumbUrls.push(url);
+        b.firstChild.src = url; b.lastChild.textContent = rec.name;
+        const open = () => {
+          $('threshold').value = rec.cutoff; $('thresholdVal').textContent = rec.cutoff;
+          loadImage(URL.createObjectURL(rec.blob), rec.name, 'u:' + rec.id, rec.blob.type === 'image/svg+xml', true, true);
+          document.body.classList.remove('menu');
+        };
+        b.addEventListener('click', open);
+        openers.set(b.dataset.key, open);
+        const del = document.createElement('button');
+        del.className = 'del'; del.title = 'Delete this picture and its coloring'; del.textContent = '×';
+        del.addEventListener('click', () => removeUpload(rec));
+        wrap.append(b, del); grid.appendChild(wrap);
+      }
+    }
+    for (const k of [...openers.keys()]) if (k.startsWith('u:') && !mine.some((r) => 'u:' + r.id === k)) openers.delete(k);
+    markActive(state.key);
   }
-  $('fileInput').addEventListener('change', (e) => { openFile(e.target.files[0]); e.target.value = ''; });
+
+  async function removeUpload(rec) {
+    if (!confirm(`Delete "${rec.name}" and everything you colored on it?`)) return;
+    try { await db.del('uploads', rec.id); await db.del('progress', 'u:' + rec.id); } catch (e) { /* ignore */ }
+    mine = mine.filter((r) => r !== rec);
+    if (state.key === 'u:' + rec.id) { state.key = null; state.dirty = false; }
+    refreshCatSelect($('uploadCat').value === NEW_CAT ? DEFAULT_CAT : $('uploadCat').value);
+    renderMine();
+  }
+
+  function markActive(key) {
+    document.querySelectorAll('.thumb').forEach((t) => {
+      const on = !!key && t.dataset.key === key;
+      t.classList.toggle('active', on);
+      if (on) { const d = t.closest('details'); if (d) d.open = true; }
+    });
+  }
+
+  async function addUploads(files) {
+    const imgs = [...files].filter((f) => f.type.startsWith('image/'));
+    if (!imgs.length) return;
+    let cat = $('uploadCat').value;
+    if (cat === NEW_CAT) cat = DEFAULT_CAT;
+    let last = null;
+    for (const file of imgs) {
+      const rec = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+                    name: file.name.replace(/\.[^.]+$/, '') || 'Picture', cat, cutoff: 200,   // gentler cut-off suits photos and scans
+                    blob: file, created: Date.now() };
+      try { await db.put('uploads', rec); mine.push(rec); last = rec; }
+      catch (e) {                               // storage blocked: still let them color it, just not keep it
+        $('threshold').value = 200; $('thresholdVal').textContent = '200';
+        loadImage(URL.createObjectURL(file), rec.name, null, file.type === 'image/svg+xml', false, true);
+        alert('This browser would not let me save the picture, so it will be gone when you leave the page.');
+      }
+    }
+    if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+    refreshCatSelect(cat);
+    renderMine();
+    if (last) openers.get('u:' + last.id)();
+  }
+  $('fileInput').addEventListener('change', (e) => { addUploads(e.target.files); e.target.value = ''; });
   $('stage').addEventListener('dragover', (e) => e.preventDefault());
-  $('stage').addEventListener('drop', (e) => { e.preventDefault(); openFile(e.dataTransfer.files[0]); });
+  $('stage').addEventListener('drop', (e) => { e.preventDefault(); addUploads(e.dataTransfer.files); });
 
   window.addEventListener('keydown', (e) => {
     if (e.target.tagName === 'INPUT' && e.target.type !== 'range') return;
@@ -333,18 +477,17 @@
       const grid = document.createElement('div'); grid.className = 'thumbs'; section.appendChild(grid); lib.appendChild(section);
       for (const pg of cat.pages) {
         const b = document.createElement('button');
-        b.className = 'thumb'; b.title = pg.title;
+        b.className = 'thumb'; b.title = pg.title; b.dataset.key = pg.file;
         b.innerHTML = '<img loading="lazy" alt=""><span></span>';
         b.firstChild.src = 'pages/' + pg.file;
         b.lastChild.textContent = pg.title;
         const open = () => {
-          document.querySelectorAll('.thumb.active').forEach((t) => t.classList.remove('active'));
-          b.classList.add('active'); section.open = true;
           $('threshold').value = 235; $('thresholdVal').textContent = '235';
           loadImage('pages/' + pg.file, pg.title, pg.file, /\.svg$/i.test(pg.file), true, false);
           document.body.classList.remove('menu');
         };
         b.addEventListener('click', open);
+        openers.set(pg.file, open);
         first = first || open;
         grid.appendChild(b);
       }
@@ -352,5 +495,14 @@
     return first;
   }
 
-  buildLibrary().then((openFirst) => { if (openFirst) openFirst(); });
+  (async () => {
+    try { mine = (await db.all('uploads')).sort((a, b) => a.created - b.created); } catch (e) { mine = []; }
+    refreshCatSelect(DEFAULT_CAT);
+    renderMine();
+    const openFirst = await buildLibrary();
+    let last = null;
+    try { last = localStorage.getItem('cb:last'); } catch (e) { /* ignore */ }
+    const open = openers.get(last) || openFirst;
+    if (open) open();
+  })();
 })();

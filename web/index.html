@@ -18,16 +18,18 @@
 </header>
 
 <aside id="sidebar">
-  <div id="library"></div>
   <div class="upload">
-    <h2>Your own image</h2>
-    <label class="filebtn">Upload image…
-      <input id="fileInput" type="file" accept="image/*" hidden>
+    <h2>Add your own picture</h2>
+    <label class="row small">Save in <select id="uploadCat"></select></label>
+    <label class="filebtn">Upload image(s)…
+      <input id="fileInput" type="file" accept="image/*" multiple hidden>
     </label>
     <label class="row small" for="threshold">White cut-off <span id="thresholdVal">235</span></label>
     <input id="threshold" type="range" min="120" max="254" value="235">
-    <p class="hint">Anything lighter than the cut-off becomes see-through, so you can color behind the lines. Photos work best with a lower cut-off.</p>
+    <p class="hint">Anything lighter than the cut-off becomes see-through, so you can color behind the lines. Photos work best with a lower cut-off. Your pictures and coloring are kept in this browser only.</p>
   </div>
+  <div id="mine"></div>
+  <div id="library"></div>
   <p class="hint credits">Starter pages are original and public domain (CC0). See <code>pages/README.md</code> to add more.</p>
 </aside>
 
@@ -42,7 +44,7 @@
   <div class="group" id="toolBtns">
     <button data-tool="brush" class="tool active" title="Brush (B)">🖌 Brush</button>
     <button data-tool="fill" class="tool" title="Fill (F)">🪣 Fill</button>
-    <button data-tool="eraser" class="tool" title="Eraser (E)">🧽 Eraser</button>
+    <button data-tool="eraser" class="tool" title="Eraser (E): removes your color only, never the line art">🧽 Eraser</button>
     <button data-tool="pick" class="tool" title="Pick color (I)">💧 Pick</button>
   </div>
   <div class="group">
