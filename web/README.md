@@ -1,5 +1,8 @@
 # Coloring Book (web)
 
+This folder is the whole app. It is published as the GitHub Pages site **and** bundled into the
+Android APK (`../coloringbook`), so a change here updates both.
+
 A browser coloring book: pick a page (or upload your own), and color it on a layer *under* the
 line art, so the ink always stays on top. Pure static HTML/JS, no build step.
 

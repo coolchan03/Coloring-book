@@ -1,0 +1,42 @@
+name: Build Coloring Book APK
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'web/**'
+      - 'coloringbook/**'
+      - 'gradle/**'
+      - 'settings.gradle.kts'
+      - '.github/workflows/coloringbook-apk.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: coloringbook-apk
+  cancel-in-progress: true
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Build APK
+        run: ./gradlew :coloringbook:assembleRelease --no-daemon
+      - name: Publish to the rolling "apk-latest" release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp coloringbook/build/outputs/apk/release/*.apk ColoringBook.apk
+          gh release delete apk-latest --cleanup-tag --yes || true
+          gh release create apk-latest ColoringBook.apk \
+            --target "$GITHUB_SHA" \
+            --title "Coloring Book APK (latest)" \
+            --notes "Android build of the coloring book, rebuilt from the same web/ folder that powers the website. Download ColoringBook.apk on your phone and open it; you may need to allow installs from your browser. Build $GITHUB_RUN_NUMBER, commit $GITHUB_SHA."
