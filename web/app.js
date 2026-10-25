@@ -323,10 +323,17 @@
     const o = out.getContext('2d');
     o.fillStyle = '#fff'; o.fillRect(0, 0, out.width, out.height);
     o.drawImage(colorCv, 0, 0); o.drawImage(linesCv, 0, 0);
+    const name = (state.title || 'coloring').replace(/[^\w-]+/g, '-').toLowerCase() + '.png';
     out.toBlob((blob) => {
+      if (window.AndroidBridge) {                // inside the Android app: a WebView cannot download blobs itself
+        const fr = new FileReader();
+        fr.onload = () => window.AndroidBridge.saveImage(String(fr.result).split(',')[1], name);
+        fr.readAsDataURL(blob);
+        return;
+      }
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = (state.title || 'coloring').replace(/[^\w-]+/g, '-').toLowerCase() + '.png';
+      a.download = name;
       a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
     });
   });
