@@ -1,6 +1,190 @@
 {
   "categories": [
     {
+      "id": "easy",
+      "name": "Easy",
+      "pages": [
+        {
+          "title": "Apple",
+          "file": "easy/apple.svg"
+        },
+        {
+          "title": "Balloons",
+          "file": "easy/balloons.svg"
+        },
+        {
+          "title": "Car",
+          "file": "easy/car.svg"
+        },
+        {
+          "title": "Cupcake",
+          "file": "easy/cupcake.svg"
+        },
+        {
+          "title": "Fish",
+          "file": "easy/fish.svg"
+        },
+        {
+          "title": "Flower",
+          "file": "easy/flower.svg"
+        },
+        {
+          "title": "House",
+          "file": "easy/house.svg"
+        },
+        {
+          "title": "Ice Cream",
+          "file": "easy/ice-cream.svg"
+        },
+        {
+          "title": "Rainbow",
+          "file": "easy/rainbow.svg"
+        },
+        {
+          "title": "Rocket",
+          "file": "easy/rocket.svg"
+        },
+        {
+          "title": "Star",
+          "file": "easy/star.svg"
+        },
+        {
+          "title": "Sun",
+          "file": "easy/sun.svg"
+        }
+      ]
+    },
+    {
+      "id": "halloween",
+      "name": "Halloween",
+      "pages": [
+        {
+          "title": "Bat",
+          "file": "halloween/bat.svg"
+        },
+        {
+          "title": "Candy Corn",
+          "file": "halloween/candy-corn.svg"
+        },
+        {
+          "title": "Ghost",
+          "file": "halloween/ghost.svg"
+        },
+        {
+          "title": "Jack O Lantern",
+          "file": "halloween/jack-o-lantern.svg"
+        },
+        {
+          "title": "Spider Web",
+          "file": "halloween/spider-web.svg"
+        },
+        {
+          "title": "Witch Hat",
+          "file": "halloween/witch-hat.svg"
+        }
+      ]
+    },
+    {
+      "id": "thanksgiving",
+      "name": "Thanksgiving",
+      "pages": [
+        {
+          "title": "Acorn",
+          "file": "thanksgiving/acorn.svg"
+        },
+        {
+          "title": "Autumn Leaf",
+          "file": "thanksgiving/autumn-leaf.svg"
+        },
+        {
+          "title": "Corn",
+          "file": "thanksgiving/corn.svg"
+        },
+        {
+          "title": "Pilgrim Hat",
+          "file": "thanksgiving/pilgrim-hat.svg"
+        },
+        {
+          "title": "Pumpkin",
+          "file": "thanksgiving/pumpkin.svg"
+        },
+        {
+          "title": "Turkey",
+          "file": "thanksgiving/turkey.svg"
+        }
+      ]
+    },
+    {
+      "id": "christmas",
+      "name": "Christmas",
+      "pages": [
+        {
+          "title": "Christmas Tree",
+          "file": "christmas/christmas-tree.svg"
+        },
+        {
+          "title": "Gift",
+          "file": "christmas/gift.svg"
+        },
+        {
+          "title": "Ornament",
+          "file": "christmas/ornament.svg"
+        },
+        {
+          "title": "Snowflake",
+          "file": "christmas/snowflake.svg"
+        },
+        {
+          "title": "Snowman",
+          "file": "christmas/snowman.svg"
+        }
+      ]
+    },
+    {
+      "id": "easter",
+      "name": "Easter",
+      "pages": [
+        {
+          "title": "Baby Chick",
+          "file": "easter/baby-chick.svg"
+        },
+        {
+          "title": "Bunny",
+          "file": "easter/bunny.svg"
+        },
+        {
+          "title": "Easter Basket",
+          "file": "easter/easter-basket.svg"
+        },
+        {
+          "title": "Easter Egg",
+          "file": "easter/easter-egg.svg"
+        },
+        {
+          "title": "Tulip",
+          "file": "easter/tulip.svg"
+        }
+      ]
+    },
+    {
+      "id": "other-holidays",
+      "name": "Other Holidays",
+      "pages": [
+        {
+          "title": "Love Letter",
+          "file": "other-holidays/love-letter.svg"
+        },
+        {
+          "title": "Shamrock",
+          "file": "other-holidays/shamrock.svg"
+        },
+        {
+          "title": "Valentine Heart",
+          "file": "other-holidays/valentine-heart.svg"
+        }
+      ]
+    },
+    {
       "id": "animals",
       "name": "Animals",
       "pages": [

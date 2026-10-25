@@ -10,6 +10,8 @@ import os
 
 PAGES = os.path.join(os.path.dirname(__file__), "..", "web", "pages")
 EXT = {".svg", ".png", ".jpg", ".jpeg", ".webp"}
+# Categories listed here come first, in this order; any others follow alphabetically.
+ORDER = ["easy", "halloween", "thanksgiving", "christmas", "easter", "other-holidays"]
 
 
 def title(name):
@@ -17,7 +19,7 @@ def title(name):
 
 
 cats = []
-for cat in sorted(os.listdir(PAGES)):
+for cat in sorted(os.listdir(PAGES), key=lambda c: (ORDER.index(c) if c in ORDER else len(ORDER), c)):
     folder = os.path.join(PAGES, cat)
     if not os.path.isdir(folder):
         continue

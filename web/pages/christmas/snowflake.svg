@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="1000" height="800">
+<rect width="1000" height="800" fill="#fff"/>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<g transform="rotate(0.000 500 400)"><path d="M500 400 V90"/>
+<path d="M500 250 L420 170 M500 250 L580 170 M500 140 L450 90 M500 140 L550 90"/>
+</g>
+<g transform="rotate(60.000 500 400)"><path d="M500 400 V90"/>
+<path d="M500 250 L420 170 M500 250 L580 170 M500 140 L450 90 M500 140 L550 90"/>
+</g>
+<g transform="rotate(120.000 500 400)"><path d="M500 400 V90"/>
+<path d="M500 250 L420 170 M500 250 L580 170 M500 140 L450 90 M500 140 L550 90"/>
+</g>
+<g transform="rotate(180.000 500 400)"><path d="M500 400 V90"/>
+<path d="M500 250 L420 170 M500 250 L580 170 M500 140 L450 90 M500 140 L550 90"/>
+</g>
+<g transform="rotate(240.000 500 400)"><path d="M500 400 V90"/>
+<path d="M500 250 L420 170 M500 250 L580 170 M500 140 L450 90 M500 140 L550 90"/>
+</g>
+<g transform="rotate(300.000 500 400)"><path d="M500 400 V90"/>
+<path d="M500 250 L420 170 M500 250 L580 170 M500 140 L450 90 M500 140 L550 90"/>
+</g>
+<path d="M500.0 345.0 L527.5 352.4 L547.6 372.5 L555.0 400.0 L547.6 427.5 L527.5 447.6 L500.0 455.0 L472.5 447.6 L452.4 427.5 L445.0 400.0 L452.4 372.5 L472.5 352.4Z"/>
+<g transform="rotate(0.000 500 400)"><ellipse cx="500" cy="90" rx="14" ry="14" fill="#fff"/>
+</g>
+<g transform="rotate(60.000 500 400)"><ellipse cx="500" cy="90" rx="14" ry="14" fill="#fff"/>
+</g>
+<g transform="rotate(120.000 500 400)"><ellipse cx="500" cy="90" rx="14" ry="14" fill="#fff"/>
+</g>
+<g transform="rotate(180.000 500 400)"><ellipse cx="500" cy="90" rx="14" ry="14" fill="#fff"/>
+</g>
+<g transform="rotate(240.000 500 400)"><ellipse cx="500" cy="90" rx="14" ry="14" fill="#fff"/>
+</g>
+<g transform="rotate(300.000 500 400)"><ellipse cx="500" cy="90" rx="14" ry="14" fill="#fff"/>
+</g>
+
+</g>
+</svg>

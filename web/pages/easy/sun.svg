@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="1000" height="800">
+<rect width="1000" height="800" fill="#fff"/>
+<g fill="none" stroke="#000" stroke-width="9" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="500" cy="400" rx="170" ry="170" fill="#fff"/>
+<g transform="rotate(0.000 500 400)"><path d="M500 190 L460 110 L540 110Z" fill="#fff"/>
+</g>
+<g transform="rotate(30.000 500 400)"><path d="M500 190 L460 110 L540 110Z" fill="#fff"/>
+</g>
+<g transform="rotate(60.000 500 400)"><path d="M500 190 L460 110 L540 110Z" fill="#fff"/>
+</g>
+<g transform="rotate(90.000 500 400)"><path d="M500 190 L460 110 L540 110Z" fill="#fff"/>
+</g>
+<g transform="rotate(120.000 500 400)"><path d="M500 190 L460 110 L540 110Z" fill="#fff"/>
+</g>
+<g transform="rotate(150.000 500 400)"><path d="M500 190 L460 110 L540 110Z" fill="#fff"/>
+</g>
+<g transform="rotate(180.000 500 400)"><path d="M500 190 L460 110 L540 110Z" fill="#fff"/>
+</g>
+<g transform="rotate(210.000 500 400)"><path d="M500 190 L460 110 L540 110Z" fill="#fff"/>
+</g>
+<g transform="rotate(240.000 500 400)"><path d="M500 190 L460 110 L540 110Z" fill="#fff"/>
+</g>
+<g transform="rotate(270.000 500 400)"><path d="M500 190 L460 110 L540 110Z" fill="#fff"/>
+</g>
+<g transform="rotate(300.000 500 400)"><path d="M500 190 L460 110 L540 110Z" fill="#fff"/>
+</g>
+<g transform="rotate(330.000 500 400)"><path d="M500 190 L460 110 L540 110Z" fill="#fff"/>
+</g>
+<ellipse cx="440" cy="370" rx="18" ry="18"/>
+<circle cx="440" cy="370" r="14" fill="#000"/>
+<circle cx="560" cy="370" r="14" fill="#000"/>
+<path d="M420 450 Q500 530 580 450"/>
+
+</g>
+</svg>

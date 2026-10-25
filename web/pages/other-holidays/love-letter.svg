@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="1000" height="800">
+<rect width="1000" height="800" fill="#fff"/>
+<g fill="none" stroke="#000" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+<path d="M120 200 H880 V640 H120Z" fill="#fff"/>
+<path d="M120 200 L500 470 L880 200"/>
+<path d="M120 640 L400 400 M880 640 L600 400"/>
+<g transform="translate(500 470) scale(.28) translate(-500 -380)"><path d="M500 380 C400 300 330 250 360 180 C390 120 470 130 500 190 C530 130 610 120 640 180 C670 250 600 300 500 380Z" fill="#fff"/>
+</g>
+<g transform="translate(200 120) scale(0.18) translate(-500 -380)"><path d="M500 380 C400 300 330 250 360 180 C390 120 470 130 500 190 C530 130 610 120 640 180 C670 250 600 300 500 380Z" fill="#fff"/>
+</g>
+<g transform="translate(800 110) scale(0.22) translate(-500 -380)"><path d="M500 380 C400 300 330 250 360 180 C390 120 470 130 500 190 C530 130 610 120 640 180 C670 250 600 300 500 380Z" fill="#fff"/>
+</g>
+<g transform="translate(880 730) scale(0.15) translate(-500 -380)"><path d="M500 380 C400 300 330 250 360 180 C390 120 470 130 500 190 C530 130 610 120 640 180 C670 250 600 300 500 380Z" fill="#fff"/>
+</g>
+
+</g>
+</svg>

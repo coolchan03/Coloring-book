@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="1000" height="800">
+<rect width="1000" height="800" fill="#fff"/>
+<g fill="none" stroke="#000" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+<path d="M500 100 C400 100 300 200 260 380 L180 640 C170 700 220 730 280 730 H720 C780 730 830 700 820 640 L740 380 C700 200 600 100 500 100Z" fill="#fff"/>
+<path d="M290 400 C400 440 600 440 710 400"/>
+<path d="M230 560 C400 600 600 600 770 560"/>
+
+</g>
+</svg>

@@ -328,8 +328,9 @@
     }
     let first = null;
     for (const cat of manifest.categories) {
-      const h = document.createElement('h2'); h.textContent = cat.name; lib.appendChild(h);
-      const grid = document.createElement('div'); grid.className = 'thumbs'; lib.appendChild(grid);
+      const section = document.createElement('details'); section.open = cat.pages.length <= 12;
+      const h = document.createElement('summary'); h.textContent = `${cat.name} (${cat.pages.length})`; section.appendChild(h);
+      const grid = document.createElement('div'); grid.className = 'thumbs'; section.appendChild(grid); lib.appendChild(section);
       for (const pg of cat.pages) {
         const b = document.createElement('button');
         b.className = 'thumb'; b.title = pg.title;
@@ -338,7 +339,7 @@
         b.lastChild.textContent = pg.title;
         const open = () => {
           document.querySelectorAll('.thumb.active').forEach((t) => t.classList.remove('active'));
-          b.classList.add('active');
+          b.classList.add('active'); section.open = true;
           $('threshold').value = 235; $('thresholdVal').textContent = '235';
           loadImage('pages/' + pg.file, pg.title, pg.file, /\.svg$/i.test(pg.file), true, false);
           document.body.classList.remove('menu');
