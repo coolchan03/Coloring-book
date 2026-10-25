@@ -1,0 +1,78 @@
+{
+  "categories": [
+    {
+      "id": "animals",
+      "name": "Animals",
+      "pages": [
+        {
+          "title": "Butterfly",
+          "file": "animals/butterfly.svg"
+        },
+        {
+          "title": "Cat",
+          "file": "animals/cat.svg"
+        },
+        {
+          "title": "Fish",
+          "file": "animals/fish.svg"
+        }
+      ]
+    },
+    {
+      "id": "mandalas",
+      "name": "Mandalas",
+      "pages": [
+        {
+          "title": "Blossom Mandala",
+          "file": "mandalas/blossom-mandala.svg"
+        },
+        {
+          "title": "Flower Of Life",
+          "file": "mandalas/flower-of-life.svg"
+        },
+        {
+          "title": "Star Mandala",
+          "file": "mandalas/star-mandala.svg"
+        }
+      ]
+    },
+    {
+      "id": "nature",
+      "name": "Nature",
+      "pages": [
+        {
+          "title": "Apple Tree",
+          "file": "nature/apple-tree.svg"
+        },
+        {
+          "title": "Flower",
+          "file": "nature/flower.svg"
+        }
+      ]
+    },
+    {
+      "id": "patterns",
+      "name": "Patterns",
+      "pages": [
+        {
+          "title": "Geometric Tiles",
+          "file": "patterns/geometric-tiles.svg"
+        },
+        {
+          "title": "Waves",
+          "file": "patterns/waves.svg"
+        }
+      ]
+    },
+    {
+      "id": "scenes",
+      "name": "Scenes",
+      "pages": [
+        {
+          "title": "Little House",
+          "file": "scenes/little-house.svg"
+        }
+      ]
+    }
+  ]
+}
