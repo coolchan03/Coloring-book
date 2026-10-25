@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="1000" height="800">
+<rect width="1000" height="800" fill="#fff"/>
+<g fill="none" stroke="#000" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+<path d="M500 740 C150 500 110 250 280 160 C400 100 480 170 500 240 C520 170 600 100 720 160 C890 250 850 500 500 740Z" fill="#fff"/>
+<g transform="translate(500 450) scale(.66) translate(-500 -450)"><path d="M500 740 C150 500 110 250 280 160 C400 100 480 170 500 240 C520 170 600 100 720 160 C890 250 850 500 500 740Z" fill="#fff"/>
+</g>
+<path d="M500 300 C440 240 380 290 420 340 C450 380 500 400 500 400 C500 400 550 380 580 340 C620 290 560 240 500 300Z" fill="#fff"/>
+
+</g>
+</svg>

@@ -1,0 +1,348 @@
+{
+  "categories": [
+    {
+      "id": "easy",
+      "name": "Easy",
+      "pages": [
+        {
+          "title": "Apple",
+          "file": "easy/apple.svg"
+        },
+        {
+          "title": "Balloons",
+          "file": "easy/balloons.svg"
+        },
+        {
+          "title": "Car",
+          "file": "easy/car.svg"
+        },
+        {
+          "title": "Cupcake",
+          "file": "easy/cupcake.svg"
+        },
+        {
+          "title": "Fish",
+          "file": "easy/fish.svg"
+        },
+        {
+          "title": "Flower",
+          "file": "easy/flower.svg"
+        },
+        {
+          "title": "House",
+          "file": "easy/house.svg"
+        },
+        {
+          "title": "Ice Cream",
+          "file": "easy/ice-cream.svg"
+        },
+        {
+          "title": "Rainbow",
+          "file": "easy/rainbow.svg"
+        },
+        {
+          "title": "Rocket",
+          "file": "easy/rocket.svg"
+        },
+        {
+          "title": "Star",
+          "file": "easy/star.svg"
+        },
+        {
+          "title": "Sun",
+          "file": "easy/sun.svg"
+        }
+      ]
+    },
+    {
+      "id": "halloween",
+      "name": "Halloween",
+      "pages": [
+        {
+          "title": "Bat",
+          "file": "halloween/bat.svg"
+        },
+        {
+          "title": "Candy Corn",
+          "file": "halloween/candy-corn.svg"
+        },
+        {
+          "title": "Ghost",
+          "file": "halloween/ghost.svg"
+        },
+        {
+          "title": "Jack O Lantern",
+          "file": "halloween/jack-o-lantern.svg"
+        },
+        {
+          "title": "Spider Web",
+          "file": "halloween/spider-web.svg"
+        },
+        {
+          "title": "Witch Hat",
+          "file": "halloween/witch-hat.svg"
+        }
+      ]
+    },
+    {
+      "id": "thanksgiving",
+      "name": "Thanksgiving",
+      "pages": [
+        {
+          "title": "Acorn",
+          "file": "thanksgiving/acorn.svg"
+        },
+        {
+          "title": "Autumn Leaf",
+          "file": "thanksgiving/autumn-leaf.svg"
+        },
+        {
+          "title": "Corn",
+          "file": "thanksgiving/corn.svg"
+        },
+        {
+          "title": "Pilgrim Hat",
+          "file": "thanksgiving/pilgrim-hat.svg"
+        },
+        {
+          "title": "Pumpkin",
+          "file": "thanksgiving/pumpkin.svg"
+        },
+        {
+          "title": "Turkey",
+          "file": "thanksgiving/turkey.svg"
+        }
+      ]
+    },
+    {
+      "id": "christmas",
+      "name": "Christmas",
+      "pages": [
+        {
+          "title": "Christmas Tree",
+          "file": "christmas/christmas-tree.svg"
+        },
+        {
+          "title": "Gift",
+          "file": "christmas/gift.svg"
+        },
+        {
+          "title": "Ornament",
+          "file": "christmas/ornament.svg"
+        },
+        {
+          "title": "Snowflake",
+          "file": "christmas/snowflake.svg"
+        },
+        {
+          "title": "Snowman",
+          "file": "christmas/snowman.svg"
+        }
+      ]
+    },
+    {
+      "id": "easter",
+      "name": "Easter",
+      "pages": [
+        {
+          "title": "Baby Chick",
+          "file": "easter/baby-chick.svg"
+        },
+        {
+          "title": "Bunny",
+          "file": "easter/bunny.svg"
+        },
+        {
+          "title": "Easter Basket",
+          "file": "easter/easter-basket.svg"
+        },
+        {
+          "title": "Easter Egg",
+          "file": "easter/easter-egg.svg"
+        },
+        {
+          "title": "Tulip",
+          "file": "easter/tulip.svg"
+        }
+      ]
+    },
+    {
+      "id": "other-holidays",
+      "name": "Other Holidays",
+      "pages": [
+        {
+          "title": "Love Letter",
+          "file": "other-holidays/love-letter.svg"
+        },
+        {
+          "title": "Shamrock",
+          "file": "other-holidays/shamrock.svg"
+        },
+        {
+          "title": "Valentine Heart",
+          "file": "other-holidays/valentine-heart.svg"
+        }
+      ]
+    },
+    {
+      "id": "prehistoric-animals",
+      "name": "Prehistoric Animals",
+      "pages": [
+        {
+          "title": "Adapid Primate",
+          "file": "prehistoric-animals/adapid-primate.png"
+        },
+        {
+          "title": "American Cheetah",
+          "file": "prehistoric-animals/american-cheetah.png"
+        },
+        {
+          "title": "Ancestral Bats",
+          "file": "prehistoric-animals/ancestral-bats.png"
+        },
+        {
+          "title": "Ancient Deer",
+          "file": "prehistoric-animals/ancient-deer.png"
+        },
+        {
+          "title": "Brontothere",
+          "file": "prehistoric-animals/brontothere.png"
+        },
+        {
+          "title": "Chalicothere",
+          "file": "prehistoric-animals/chalicothere.png"
+        },
+        {
+          "title": "Columbian Mammoth",
+          "file": "prehistoric-animals/columbian-mammoth.png"
+        },
+        {
+          "title": "Condor",
+          "file": "prehistoric-animals/condor.png"
+        },
+        {
+          "title": "Early Primate",
+          "file": "prehistoric-animals/early-primate.png"
+        },
+        {
+          "title": "Endoceras",
+          "file": "prehistoric-animals/endoceras.png"
+        },
+        {
+          "title": "Entelodont",
+          "file": "prehistoric-animals/entelodont.png"
+        },
+        {
+          "title": "First Horn Deer",
+          "file": "prehistoric-animals/first-horn-deer.png"
+        },
+        {
+          "title": "Fresh Water Fish",
+          "file": "prehistoric-animals/fresh-water-fish.png"
+        },
+        {
+          "title": "Fresh Water Ray",
+          "file": "prehistoric-animals/fresh-water-ray.png"
+        },
+        {
+          "title": "Hagerman Horse",
+          "file": "prehistoric-animals/hagerman-horse.png"
+        },
+        {
+          "title": "Long Nosed Dolphin",
+          "file": "prehistoric-animals/long-nosed-dolphin.png"
+        },
+        {
+          "title": "Mosasaur",
+          "file": "prehistoric-animals/mosasaur.png"
+        },
+        {
+          "title": "Oreodont",
+          "file": "prehistoric-animals/oreodont.png"
+        },
+        {
+          "title": "Sea Star",
+          "file": "prehistoric-animals/sea-star.png"
+        },
+        {
+          "title": "Shasta Ground Sloth",
+          "file": "prehistoric-animals/shasta-ground-sloth.png"
+        }
+      ]
+    },
+    {
+      "id": "animals",
+      "name": "Animals",
+      "pages": [
+        {
+          "title": "Butterfly",
+          "file": "animals/butterfly.svg"
+        },
+        {
+          "title": "Cat",
+          "file": "animals/cat.svg"
+        },
+        {
+          "title": "Fish",
+          "file": "animals/fish.svg"
+        }
+      ]
+    },
+    {
+      "id": "mandalas",
+      "name": "Mandalas",
+      "pages": [
+        {
+          "title": "Blossom Mandala",
+          "file": "mandalas/blossom-mandala.svg"
+        },
+        {
+          "title": "Flower Of Life",
+          "file": "mandalas/flower-of-life.svg"
+        },
+        {
+          "title": "Star Mandala",
+          "file": "mandalas/star-mandala.svg"
+        }
+      ]
+    },
+    {
+      "id": "nature",
+      "name": "Nature",
+      "pages": [
+        {
+          "title": "Apple Tree",
+          "file": "nature/apple-tree.svg"
+        },
+        {
+          "title": "Flower",
+          "file": "nature/flower.svg"
+        }
+      ]
+    },
+    {
+      "id": "patterns",
+      "name": "Patterns",
+      "pages": [
+        {
+          "title": "Geometric Tiles",
+          "file": "patterns/geometric-tiles.svg"
+        },
+        {
+          "title": "Waves",
+          "file": "patterns/waves.svg"
+        }
+      ]
+    },
+    {
+      "id": "scenes",
+      "name": "Scenes",
+      "pages": [
+        {
+          "title": "Little House",
+          "file": "scenes/little-house.svg"
+        }
+      ]
+    }
+  ]
+}

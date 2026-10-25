@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="1000" height="800">
+<rect width="1000" height="800" fill="#fff"/>
+<g fill="none" stroke="#000" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+<g transform="rotate(0 500 480)"><g transform="translate(0 100)"><path d="M500 380 C400 300 330 250 360 180 C390 120 470 130 500 190 C530 130 610 120 640 180 C670 250 600 300 500 380Z" fill="#fff"/>
+<path d="M500 380 V210"/>
+</g></g>
+<g transform="rotate(120 500 480)"><g transform="translate(0 100)"><path d="M500 380 C400 300 330 250 360 180 C390 120 470 130 500 190 C530 130 610 120 640 180 C670 250 600 300 500 380Z" fill="#fff"/>
+<path d="M500 380 V210"/>
+</g></g>
+<g transform="rotate(240 500 480)"><g transform="translate(0 100)"><path d="M500 380 C400 300 330 250 360 180 C390 120 470 130 500 190 C530 130 610 120 640 180 C670 250 600 300 500 380Z" fill="#fff"/>
+<path d="M500 380 V210"/>
+</g></g>
+<path d="M500 480 C505 560 480 650 420 720"/>
+
+</g>
+</svg>

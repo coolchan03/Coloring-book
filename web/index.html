@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Coloring Book</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <button id="menuBtn" class="icon" title="Pages" aria-label="Pages">☰</button>
+  <h1 id="pageTitle">Coloring Book</h1>
+  <div class="spacer"></div>
+  <button id="undoBtn" class="icon" title="Undo (Ctrl+Z)" aria-label="Undo">↶</button>
+  <button id="redoBtn" class="icon" title="Redo (Ctrl+Shift+Z)" aria-label="Redo">↷</button>
+  <button id="clearBtn" class="icon" title="Clear coloring" aria-label="Clear">🗑</button>
+  <button id="saveBtn" class="primary" title="Download as PNG">Save PNG</button>
+</header>
+
+<aside id="sidebar">
+  <div class="upload">
+    <h2>Add your own picture</h2>
+    <label class="row small">Save in <select id="uploadCat"></select></label>
+    <label class="filebtn">Upload image(s)…
+      <input id="fileInput" type="file" accept="image/*" multiple hidden>
+    </label>
+    <label class="row small" for="threshold">White cut-off <span id="thresholdVal">235</span></label>
+    <input id="threshold" type="range" min="120" max="254" value="235">
+    <p class="hint">Anything lighter than the cut-off becomes see-through, so you can color behind the lines. Photos work best with a lower cut-off. Your pictures and coloring are kept in this browser only.</p>
+  </div>
+  <div id="mine"></div>
+  <div id="library"></div>
+  <p class="hint credits">Starter pages are original and public domain (CC0). See <code>pages/README.md</code> to add more.</p>
+</aside>
+
+<main id="stage">
+  <div id="board">
+    <canvas id="color"></canvas>
+    <canvas id="lines"></canvas>
+  </div>
+</main>
+
+<footer id="tools">
+  <div class="group" id="toolBtns">
+    <button data-tool="brush" class="tool active" title="Brush (B)">🖌 Brush</button>
+    <button data-tool="fill" class="tool" title="Fill (F)">🪣 Fill</button>
+    <button data-tool="eraser" class="tool" title="Eraser (E): removes your color only, never the line art">🧽 Eraser</button>
+    <button data-tool="pick" class="tool" title="Pick color (I)">💧 Pick</button>
+  </div>
+  <div class="group">
+    <label class="row small">Size <input id="size" type="range" min="1" max="80" value="14"></label>
+  </div>
+  <div class="group palette" id="palette"></div>
+  <div class="group">
+    <input id="customColor" type="color" value="#e63946" title="Custom color">
+  </div>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="1000" height="800">
+<rect width="1000" height="800" fill="#fff"/>
+<g fill="none" stroke="#000" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+<g transform="rotate(-72 500 470)"><path d="M500 350 C560 330 580 130 500 70 C420 130 440 330 500 350Z" fill="#fff"/>
+<path d="M500 320 C530 300 540 170 500 130 C460 170 470 300 500 320Z"/>
+</g>
+<g transform="rotate(-48 500 470)"><path d="M500 350 C560 330 580 130 500 70 C420 130 440 330 500 350Z" fill="#fff"/>
+<path d="M500 320 C530 300 540 170 500 130 C460 170 470 300 500 320Z"/>
+</g>
+<g transform="rotate(-24 500 470)"><path d="M500 350 C560 330 580 130 500 70 C420 130 440 330 500 350Z" fill="#fff"/>
+<path d="M500 320 C530 300 540 170 500 130 C460 170 470 300 500 320Z"/>
+</g>
+<g transform="rotate(0 500 470)"><path d="M500 350 C560 330 580 130 500 70 C420 130 440 330 500 350Z" fill="#fff"/>
+<path d="M500 320 C530 300 540 170 500 130 C460 170 470 300 500 320Z"/>
+</g>
+<g transform="rotate(24 500 470)"><path d="M500 350 C560 330 580 130 500 70 C420 130 440 330 500 350Z" fill="#fff"/>
+<path d="M500 320 C530 300 540 170 500 130 C460 170 470 300 500 320Z"/>
+</g>
+<g transform="rotate(48 500 470)"><path d="M500 350 C560 330 580 130 500 70 C420 130 440 330 500 350Z" fill="#fff"/>
+<path d="M500 320 C530 300 540 170 500 130 C460 170 470 300 500 320Z"/>
+</g>
+<g transform="rotate(72 500 470)"><path d="M500 350 C560 330 580 130 500 70 C420 130 440 330 500 350Z" fill="#fff"/>
+<path d="M500 320 C530 300 540 170 500 130 C460 170 470 300 500 320Z"/>
+</g>
+<ellipse cx="500" cy="540" rx="150" ry="175" fill="#fff"/>
+<path d="M395 480 C350 560 390 650 450 660"/>
+<path d="M605 480 C650 560 610 650 550 660"/>
+<ellipse cx="500" cy="360" rx="62" ry="68" fill="#fff"/>
+<path d="M485 365 H515 L500 405Z" fill="#fff"/>
+<path d="M500 405 C490 450 520 450 510 405"/>
+<ellipse cx="478" cy="340" rx="14" ry="14" fill="#fff"/>
+<ellipse cx="522" cy="340" rx="14" ry="14" fill="#fff"/>
+<circle cx="480" cy="342" r="7" fill="#000"/>
+<circle cx="520" cy="342" r="7" fill="#000"/>
+<path d="M455 715 V770 M455 770 l-30 15 M455 770 l0 20 M455 770 l30 15 M545 715 V770 M545 770 l-30 15 M545 770 l0 20 M545 770 l30 15"/>
+
+</g>
+</svg>
