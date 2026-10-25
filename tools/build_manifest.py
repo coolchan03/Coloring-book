@@ -11,7 +11,7 @@ import os
 PAGES = os.path.join(os.path.dirname(__file__), "..", "web", "pages")
 EXT = {".svg", ".png", ".jpg", ".jpeg", ".webp"}
 # Categories listed here come first, in this order; any others follow alphabetically.
-ORDER = ["easy", "halloween", "thanksgiving", "christmas", "easter", "other-holidays"]
+ORDER = ["easy", "halloween", "thanksgiving", "christmas", "easter", "other-holidays", "prehistoric-animals"]
 
 
 def title(name):

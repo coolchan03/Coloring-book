@@ -185,6 +185,92 @@
       ]
     },
     {
+      "id": "prehistoric-animals",
+      "name": "Prehistoric Animals",
+      "pages": [
+        {
+          "title": "Adapid Primate",
+          "file": "prehistoric-animals/adapid-primate.png"
+        },
+        {
+          "title": "American Cheetah",
+          "file": "prehistoric-animals/american-cheetah.png"
+        },
+        {
+          "title": "Ancestral Bats",
+          "file": "prehistoric-animals/ancestral-bats.png"
+        },
+        {
+          "title": "Ancient Deer",
+          "file": "prehistoric-animals/ancient-deer.png"
+        },
+        {
+          "title": "Brontothere",
+          "file": "prehistoric-animals/brontothere.png"
+        },
+        {
+          "title": "Chalicothere",
+          "file": "prehistoric-animals/chalicothere.png"
+        },
+        {
+          "title": "Columbian Mammoth",
+          "file": "prehistoric-animals/columbian-mammoth.png"
+        },
+        {
+          "title": "Condor",
+          "file": "prehistoric-animals/condor.png"
+        },
+        {
+          "title": "Early Primate",
+          "file": "prehistoric-animals/early-primate.png"
+        },
+        {
+          "title": "Endoceras",
+          "file": "prehistoric-animals/endoceras.png"
+        },
+        {
+          "title": "Entelodont",
+          "file": "prehistoric-animals/entelodont.png"
+        },
+        {
+          "title": "First Horn Deer",
+          "file": "prehistoric-animals/first-horn-deer.png"
+        },
+        {
+          "title": "Fresh Water Fish",
+          "file": "prehistoric-animals/fresh-water-fish.png"
+        },
+        {
+          "title": "Fresh Water Ray",
+          "file": "prehistoric-animals/fresh-water-ray.png"
+        },
+        {
+          "title": "Hagerman Horse",
+          "file": "prehistoric-animals/hagerman-horse.png"
+        },
+        {
+          "title": "Long Nosed Dolphin",
+          "file": "prehistoric-animals/long-nosed-dolphin.png"
+        },
+        {
+          "title": "Mosasaur",
+          "file": "prehistoric-animals/mosasaur.png"
+        },
+        {
+          "title": "Oreodont",
+          "file": "prehistoric-animals/oreodont.png"
+        },
+        {
+          "title": "Sea Star",
+          "file": "prehistoric-animals/sea-star.png"
+        },
+        {
+          "title": "Shasta Ground Sloth",
+          "file": "prehistoric-animals/shasta-ground-sloth.png"
+        }
+      ]
+    },
+    {
       "id": "animals",
       "name": "Animals",
       "pages": [
