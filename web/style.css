@@ -52,3 +52,35 @@ input[type=color]{width:38px;height:32px;padding:0;border:1px solid var(--line);
 .del{position:absolute;top:2px;right:2px;width:22px;height:22px;padding:0;line-height:1;border-radius:50%;font-size:15px;opacity:.85}
 .upload select{flex:1;min-width:0;font:inherit;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:4px}
 .upload{margin-bottom:8px}
+
+/* launcher */
+#home{display:none;grid-area:o;overflow:auto;padding:20px;min-height:0}
+body.home{grid-template-areas:"h h" "o o" "o o"}
+body.home #home{display:block}
+body.home #sidebar,body.home #stage,body.home #tools,body.home .editor-only{display:none !important}
+@media (max-width:760px){body.home{grid-template-areas:"h" "o" "o"}}
+#home>*{max-width:980px;margin-left:auto;margin-right:auto}
+.hero{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+.hero h2{margin:0;font-size:28px}
+.hero p{margin:2px 0 0;color:var(--muted)}
+.hero img{border-radius:18px}
+.continue{display:flex;align-items:center;gap:14px;width:100%;text-align:left;padding:10px;margin-bottom:18px;background:var(--panel)}
+.continue img{width:120px;height:90px;object-fit:contain;background:#fff;border-radius:8px}
+.continue small{display:block;color:var(--muted)}
+.continue strong{font-size:20px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+.tile{display:flex;flex-direction:column;align-items:stretch;gap:4px;padding:8px;text-align:left;background:var(--panel)}
+.tile b{font-size:16px;padding:0 4px}
+.tile small{color:var(--muted);padding:0 4px 4px}
+.collage{display:grid;grid-template-columns:1fr 1fr;gap:3px;aspect-ratio:1;background:#fff;border-radius:8px;overflow:hidden;padding:3px}
+.collage img{width:100%;height:100%;object-fit:contain;background:#fff;min-height:0}
+.tile.add{justify-content:center;align-items:center;text-align:center;border:2px dashed var(--accent);color:var(--accent)}
+.tile.add .plus{font-size:56px;line-height:1}
+.tile.add small{color:inherit}
+.catbar{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+.catbar h2{margin:0}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:14px}
+.cardwrap{position:relative}
+.card{position:relative;width:100%;display:flex;flex-direction:column;gap:4px;padding:6px;background:#fff;color:#222;align-items:center}
+.card img{width:100%;aspect-ratio:5/4;object-fit:contain}
+.badge{position:absolute;top:6px;left:6px;font-style:normal;background:#fff;border-radius:12px;padding:0 5px;box-shadow:0 1px 3px rgba(0,0,0,.3)}

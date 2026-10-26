@@ -14,6 +14,7 @@
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden|smallestScreenSize"
+            android:enableOnBackInvokedCallback="false"
             android:exported="true"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>

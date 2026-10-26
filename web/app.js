@@ -134,6 +134,7 @@
     return {
       get: (store, key) => run(store, 'readonly', (o) => o.get(key)),
       all: (store) => run(store, 'readonly', (o) => o.getAll()),
+      keys: (store) => run(store, 'readonly', (o) => o.getAllKeys()),
       put: (store, val, key) => run(store, 'readwrite', (o) => (key === undefined ? o.put(val) : o.put(val, key))),
       del: (store, key) => run(store, 'readwrite', (o) => o.delete(key))
     };
@@ -148,10 +149,15 @@
   // Only saves after an edit, so a page that is still restoring can never overwrite saved coloring with a blank.
   function flushSave() {
     clearTimeout(saveTimer);
-    if (!state.key || !state.dirty) return;
+    if (!state.key || !state.dirty) return Promise.resolve();
     const key = state.key;
     state.dirty = false;
-    colorCv.toBlob((blob) => { if (blob) db.put('progress', blob, key).catch(() => {}); });   // toBlob copies the bitmap immediately
+    return new Promise((done) => {
+      colorCv.toBlob((blob) => {                // toBlob copies the bitmap immediately
+        if (!blob) return done();
+        db.put('progress', blob, key).then(() => progressKeys.add(key)).catch(() => {}).then(done);
+      });
+    });
   }
   window.addEventListener('pagehide', flushSave);
   document.addEventListener('visibilitychange', () => { if (document.hidden) flushSave(); });
@@ -400,7 +406,7 @@
           loadImage(URL.createObjectURL(rec.blob), rec.name, 'u:' + rec.id, rec.blob.type === 'image/svg+xml', true, true);
           document.body.classList.remove('menu');
         };
-        b.addEventListener('click', open);
+        b.addEventListener('click', () => go('p/' + enc(b.dataset.key)));
         openers.set(b.dataset.key, open);
         const del = document.createElement('button');
         del.className = 'del'; del.title = 'Delete this picture and its coloring'; del.textContent = '×';
@@ -417,8 +423,11 @@
     try { await db.del('uploads', rec.id); await db.del('progress', 'u:' + rec.id); } catch (e) { /* ignore */ }
     mine = mine.filter((r) => r !== rec);
     if (state.key === 'u:' + rec.id) { state.key = null; state.dirty = false; }
+    progressKeys.delete('u:' + rec.id);
+    if (blobUrls.has(rec.id)) { URL.revokeObjectURL(blobUrls.get(rec.id)); blobUrls.delete(rec.id); }
     refreshCatSelect($('uploadCat').value === NEW_CAT ? DEFAULT_CAT : $('uploadCat').value);
     renderMine();
+    if (document.body.classList.contains('home')) route();
   }
 
   function markActive(key) {
@@ -449,11 +458,13 @@
     if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
     refreshCatSelect(cat);
     renderMine();
-    if (last) openers.get('u:' + last.id)();
+    if (last) go('p/' + enc('u:' + last.id));
   }
   $('fileInput').addEventListener('change', (e) => { addUploads(e.target.files); e.target.value = ''; });
-  $('stage').addEventListener('dragover', (e) => e.preventDefault());
-  $('stage').addEventListener('drop', (e) => { e.preventDefault(); addUploads(e.dataTransfer.files); });
+  for (const area of [$('stage'), $('home')]) {
+    area.addEventListener('dragover', (e) => e.preventDefault());
+    area.addEventListener('drop', (e) => { e.preventDefault(); addUploads(e.dataTransfer.files); });
+  }
 
   window.addEventListener('keydown', (e) => {
     if (e.target.tagName === 'INPUT' && e.target.type !== 'range') return;
@@ -475,9 +486,9 @@
       manifest = await (await fetch('pages/manifest.json')).json();
     } catch (e) {
       lib.innerHTML = '<p class="hint">Could not load the page library. If you opened this file directly, serve the folder over http (for example <code>python3 -m http.server</code>) or use the GitHub Pages site. Uploading your own image still works.</p>';
-      return null;
+      return;
     }
-    let first = null;
+    catalog = manifest.categories;
     for (const cat of manifest.categories) {
       const section = document.createElement('details'); section.open = cat.pages.length <= 12;
       const h = document.createElement('summary'); h.textContent = `${cat.name} (${cat.pages.length})`; section.appendChild(h);
@@ -493,23 +504,167 @@
           loadImage('pages/' + pg.file, pg.title, pg.file, /\.svg$/i.test(pg.file), true, false);
           document.body.classList.remove('menu');
         };
-        b.addEventListener('click', open);
+        b.addEventListener('click', () => go('p/' + enc(pg.file)));
         openers.set(pg.file, open);
-        first = first || open;
         grid.appendChild(b);
       }
     }
-    return first;
   }
+
+  /* ---------- launcher (home screen) and navigation ---------- */
+
+  let catalog = [];                             // built-in categories from pages/manifest.json
+  let progressKeys = new Set();                 // pages that have saved coloring
+  const blobUrls = new Map();                   // upload id -> object URL used by the launcher
+  const enc = encodeURIComponent;
+
+  function el(tag, cls, text) {
+    const n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+  function blobUrl(rec) {
+    if (!blobUrls.has(rec.id)) blobUrls.set(rec.id, URL.createObjectURL(rec.blob));
+    return blobUrls.get(rec.id);
+  }
+  function launcherCategories() {
+    const mineCats = [...new Set(mine.map((r) => r.cat))].map((cat) => ({
+      id: 'my:' + cat, name: cat, star: true,
+      items: mine.filter((r) => r.cat === cat).map((r) => ({ key: 'u:' + r.id, title: r.name, src: blobUrl(r), rec: r }))
+    }));
+    const builtIn = catalog.map((c) => ({
+      id: c.id, name: c.name,
+      items: c.pages.map((p) => ({ key: p.file, title: p.title, src: 'pages/' + p.file }))
+    }));
+    return [...mineCats, ...builtIn];
+  }
+
+  // A page's picture with the person's coloring behind the ink, so "colored" pages look colored on the launcher.
+  async function composePreview(key, src) {
+    const blob = await db.get('progress', key);
+    if (!blob) return null;
+    const img = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = src; });
+    const w = 360, h = Math.round(w * (img.naturalHeight || 800) / (img.naturalWidth || 1000));
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    const x = c.getContext('2d');
+    x.fillStyle = '#fff'; x.fillRect(0, 0, w, h);
+    x.drawImage(await createImageBitmap(blob), 0, 0, w, h);
+    x.globalCompositeOperation = 'multiply';    // white keeps the color, black ink stays black
+    x.drawImage(img, 0, 0, w, h);
+    return new Promise((ok) => c.toBlob((b) => ok(b && URL.createObjectURL(b))));
+  }
+  const previewUrls = [];
+  function withProgressPreview(img, item) {
+    if (!progressKeys.has(item.key)) return;
+    composePreview(item.key, item.src).then((u) => { if (u) { previewUrls.push(u); img.src = u; } }).catch(() => {});
+  }
+
+  function showView(title) {
+    document.body.classList.add('home');
+    document.body.classList.remove('menu');
+    $('pageTitle').textContent = title;
+    previewUrls.splice(0).forEach((u) => URL.revokeObjectURL(u));
+    $('home').scrollTop = 0;
+  }
+
+  let navId = 0;                                // lets a slow render notice the person has already moved on
+  async function showHome() {
+    const id = ++navId;
+    showView('Coloring Book');
+    await flushSave();                          // so "colored" badges and previews are current
+    if (id !== navId) return;
+    const box = $('home'); box.innerHTML = '';
+
+    const hero = el('div', 'hero');
+    const logo = el('img'); logo.src = 'icon.svg'; logo.alt = ''; logo.width = logo.height = 72;
+    const words = el('div'); words.append(el('h2', '', 'Coloring Book'), el('p', '', 'Pick something to color'));
+    hero.append(logo, words); box.appendChild(hero);
+
+    const cats = launcherCategories();
+    let last = null;
+    try { last = localStorage.getItem('cb:last'); } catch (e) { /* ignore */ }
+    const lastItem = cats.flatMap((c) => c.items).find((it) => it.key === last);
+    if (lastItem) {
+      const b = el('button', 'continue');
+      const img = el('img'); img.src = lastItem.src; img.alt = ''; withProgressPreview(img, lastItem);
+      const t = el('div'); t.append(el('small', '', 'Continue coloring'), el('strong', '', lastItem.title));
+      b.append(img, t); b.addEventListener('click', () => go('p/' + enc(lastItem.key)));
+      box.appendChild(b);
+    }
+
+    const grid = el('div', 'tiles');
+    const add = el('button', 'tile add');
+    add.append(el('span', 'plus', '+'), el('b', '', 'Add your own picture'), el('small', '', 'Upload a photo or drawing'));
+    add.addEventListener('click', () => $('fileInput').click());
+    grid.appendChild(add);
+    for (const cat of cats) {
+      const b = el('button', 'tile');
+      const collage = el('div', 'collage');
+      for (const it of cat.items.slice(0, 4)) { const im = el('img'); im.src = it.src; im.alt = ''; im.loading = 'lazy'; collage.appendChild(im); }
+      b.append(collage, el('b', '', (cat.star ? '★ ' : '') + cat.name), el('small', '', `${cat.items.length} ${cat.items.length === 1 ? 'picture' : 'pictures'}`));
+      b.addEventListener('click', () => go('c/' + enc(cat.id)));
+      grid.appendChild(b);
+    }
+    box.appendChild(grid);
+    document.title = 'Coloring Book';
+  }
+
+  async function showCategory(id) {
+    const cat = launcherCategories().find((c) => c.id === id);
+    if (!cat) return showHome();
+    const nav = ++navId;
+    showView(cat.name);
+    await flushSave();
+    if (nav !== navId) return;
+    const box = $('home'); box.innerHTML = '';
+    const bar = el('div', 'catbar');
+    const back = el('button', '', '← All categories'); back.addEventListener('click', () => go('home'));
+    bar.append(back, el('h2', '', (cat.star ? '★ ' : '') + cat.name));
+    box.appendChild(bar);
+    const grid = el('div', 'cards');
+    for (const it of cat.items) {
+      const wrap = el('div', 'cardwrap');
+      const b = el('button', 'card');
+      const img = el('img'); img.src = it.src; img.alt = ''; img.loading = 'lazy'; withProgressPreview(img, it);
+      b.append(img, el('span', '', it.title));
+      if (progressKeys.has(it.key)) b.appendChild(el('i', 'badge', '🎨'));
+      b.addEventListener('click', () => go('p/' + enc(it.key)));
+      wrap.appendChild(b);
+      if (it.rec) {
+        const del = el('button', 'del', '×'); del.title = 'Delete this picture and its coloring';
+        del.addEventListener('click', () => removeUpload(it.rec));
+        wrap.appendChild(del);
+      }
+      grid.appendChild(wrap);
+    }
+    box.appendChild(grid);
+  }
+
+  // The address bar (and so the browser's and Android's Back button) follows the screens:
+  // #home, #c/<category>, #p/<page>.
+  function route() {
+    const h = decodeURIComponent(location.hash.slice(1));
+    if (h.startsWith('p/')) {
+      const open = openers.get(h.slice(2));
+      if (open) { navId++; document.body.classList.remove('home'); open(); return; }
+    }
+    if (h.startsWith('c/')) return showCategory(h.slice(2));
+    return showHome();
+  }
+  function go(h) {
+    if (location.hash.slice(1) !== h) history.pushState(null, '', '#' + h);
+    route();
+  }
+  window.addEventListener('popstate', route);
+  $('homeBtn').addEventListener('click', () => go('home'));
 
   (async () => {
     try { mine = (await db.all('uploads')).sort((a, b) => a.created - b.created); } catch (e) { mine = []; }
+    try { progressKeys = new Set(await db.keys('progress')); } catch (e) { /* ignore */ }
     refreshCatSelect(DEFAULT_CAT);
     renderMine();
-    const openFirst = await buildLibrary();
-    let last = null;
-    try { last = localStorage.getItem('cb:last'); } catch (e) { /* ignore */ }
-    const open = openers.get(last) || openFirst;
-    if (open) open();
+    await buildLibrary();
+    route();                                    // reloading while coloring reopens that page; otherwise the launcher
   })();
 })();
