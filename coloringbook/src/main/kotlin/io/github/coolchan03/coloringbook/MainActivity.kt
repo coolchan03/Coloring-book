@@ -111,6 +111,13 @@ class MainActivity : Activity() {
         webView.onResume()
     }
 
+    // The shared page keeps its screens (launcher, category, coloring page) in browser history,
+    // so Back steps back through them and only leaves the app from the launcher.
+    @Deprecated("Plain Activity keeps this app dependency-free")
+    override fun onBackPressed() {
+        if (webView.canGoBack()) webView.goBack() else super.onBackPressed()
+    }
+
     @Deprecated("Plain Activity keeps this app dependency-free")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_FILE) {

@@ -28,6 +28,8 @@ jobs:
           distribution: temurin
           java-version: 21
       - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-disabled: true   # builds are rare; skip storing a large cache against the account's storage quota
       - name: Build APK
         run: ./gradlew :coloringbook:assembleRelease --no-daemon
       - name: Publish to the rolling "apk-latest" release
