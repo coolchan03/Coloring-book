@@ -11,12 +11,13 @@
   ];
 
   const $ = (id) => document.getElementById(id);
-  const board = $('board'), colorCv = $('color'), linesCv = $('lines');
+  const board = $('board'), colorCv = $('color'), strokeCv = $('stroke'), linesCv = $('lines');
   const cctx = colorCv.getContext('2d', { willReadFrequently: true });
+  const sctx = strokeCv.getContext('2d');          // the stroke being drawn; merged into the color layer when you lift
   const lctx = linesCv.getContext('2d');
 
   const state = {
-    tool: 'brush', color: '#e63946', size: 14,
+    tool: 'brush', brush: 'pencil', color: '#e63946', size: 14,
     w: 0, h: 0, alpha: null,           // alpha: line-art opacity per pixel
     source: null, key: null, title: '',// source: {img,isSvg} kept so the cut-off can be re-applied
     undo: [], redo: [], dirty: false
@@ -56,8 +57,9 @@
     state.source = source; state.title = title; state.key = key; state.dirty = false;
     try { if (key) localStorage.setItem('cb:last', key); } catch (e) { /* ignore */ }
     markActive(key);
+    if (key) rememberRecent(key);
     state.undo = []; state.redo = [];
-    for (const c of [colorCv, linesCv]) { c.width = state.w; c.height = state.h; }
+    for (const c of [colorCv, strokeCv, linesCv]) { c.width = state.w; c.height = state.h; }
     cctx.clearRect(0, 0, state.w, state.h);
     renderLines();
     layout();
@@ -187,7 +189,130 @@
              k: state.w / r.width };
   }
 
+  /* ---------- brushes ---------- */
+
+  // width: stamp diameter relative to the size slider; flow: opacity of one stamp; spacing: gap between stamps
+  // as a fraction of the radius; alpha: opacity of the whole stroke; textured: the bucket fill gets the same grain.
+  const BRUSHES = {
+    pen:     { label: 'Pen',     icon: '✒️', kind: 'line', alpha: 1 },
+    marker:  { label: 'Marker',  icon: '🖊️', kind: 'line', alpha: 0.78, widen: 1.5 },
+    pencil:  { label: 'Pencil',  icon: '✏️', kind: 'grain', grain: 'pencil', width: 0.7, flow: 0.4, spacing: 0.3, textured: true },
+    crayon:  { label: 'Crayon',  icon: '🖍️', kind: 'grain', grain: 'crayon', width: 1, flow: 0.6, spacing: 0.28, jitter: true, textured: true },
+    paint:   { label: 'Paint',   icon: '🖌️', kind: 'soft', width: 1.5, flow: 0.3, spacing: 0.18 },
+    spray:   { label: 'Spray',   icon: '💨', kind: 'spray', width: 2, spacing: 0.3 },
+    sparkle: { label: 'Sparkle', icon: '✨', kind: 'sparkle', width: 2, spacing: 0.7 }
+  };
+
+  // Paper grain: a fixed, repeating pattern in canvas coordinates, so the texture stays put as strokes overlap.
+  const TILE = 256;
+  const grainCache = new Map(), patternCache = new Map(), tipCache = new Map();
+  const seeded = (seed) => () => {
+    seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  function blur3(src) {                         // 3x3 box blur that wraps, so the tile repeats without seams
+    const out = new Float32Array(src.length);
+    for (let y = 0; y < TILE; y++) for (let x = 0; x < TILE; x++) {
+      let sum = 0;
+      for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) sum += src[((y + dy + TILE) % TILE) * TILE + ((x + dx + TILE) % TILE)];
+      out[y * TILE + x] = sum / 9;
+    }
+    return out;
+  }
+  function grainValues(kind) {
+    if (!grainCache.has(kind)) {
+      const rand = seeded(kind === 'pencil' ? 11 : 29);
+      let v = blur3(Float32Array.from({ length: TILE * TILE }, rand));
+      if (kind === 'crayon') v = blur3(blur3(v));           // bigger, waxier clumps
+      let lo = 1, hi = 0;
+      for (const x of v) { if (x < lo) lo = x; if (x > hi) hi = x; }
+      const gain = kind === 'pencil' ? 2.4 : 1.9;
+      grainCache.set(kind, v.map((x) => Math.min(1, Math.max(0, ((x - lo) / (hi - lo) - 0.25) * gain))));
+    }
+    return grainCache.get(kind);
+  }
+  function grainPattern(kind, color) {
+    const key = kind + color;
+    if (!patternCache.has(key)) {
+      const cv = document.createElement('canvas'); cv.width = cv.height = TILE;
+      const x = cv.getContext('2d'), img = x.createImageData(TILE, TILE);
+      const [r, g, b] = hexToRgb(color), cov = grainValues(kind);
+      for (let i = 0, p = 0; i < cov.length; i++, p += 4) { img.data[p] = r; img.data[p + 1] = g; img.data[p + 2] = b; img.data[p + 3] = cov[i] * 255; }
+      x.putImageData(img, 0, 0);
+      patternCache.set(key, sctx.createPattern(cv, 'repeat'));
+      if (patternCache.size > 48) patternCache.delete(patternCache.keys().next().value);
+    }
+    return patternCache.get(key);
+  }
+  function softTip(color, r) {                  // a round dab that fades to nothing at the edge
+    const size = Math.max(2, Math.ceil(r / 4) * 8), key = color + size;
+    if (!tipCache.has(key)) {
+      const cv = document.createElement('canvas'); cv.width = cv.height = size;
+      const x = cv.getContext('2d'), g = x.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+      const [cr, cg, cb] = hexToRgb(color);
+      g.addColorStop(0, `rgba(${cr},${cg},${cb},1)`); g.addColorStop(0.55, `rgba(${cr},${cg},${cb},0.55)`); g.addColorStop(1, `rgba(${cr},${cg},${cb},0)`);
+      x.fillStyle = g; x.fillRect(0, 0, size, size);
+      tipCache.set(key, cv);
+      if (tipCache.size > 64) tipCache.delete(tipCache.keys().next().value);
+    }
+    return tipCache.get(key);
+  }
+  function shade(hex, f) {                      // f > 0 lightens, f < 0 darkens
+    return '#' + hexToRgb(hex).map((c) => Math.round(f > 0 ? c + (255 - c) * f : c * (1 + f)).toString(16).padStart(2, '0')).join('');
+  }
+
+  // One dab of a stamped brush at (x, y); w is the slider size in canvas pixels, press is 0..1.
+  function stamp(b, x, y, w, press) {
+    const r = Math.max(1, w * b.width / 2);
+    sctx.globalAlpha = 1;
+    if (b.kind === 'grain') {
+      const jr = b.jitter ? r * (0.85 + Math.random() * 0.3) : r;
+      const jx = b.jitter ? (Math.random() - 0.5) * r * 0.3 : 0, jy = b.jitter ? (Math.random() - 0.5) * r * 0.3 : 0;
+      sctx.globalAlpha = Math.min(1, b.flow * press);
+      sctx.fillStyle = grainPattern(b.grain, state.color);
+      sctx.beginPath(); sctx.arc(x + jx, y + jy, jr, 0, Math.PI * 2); sctx.fill();
+    } else if (b.kind === 'soft') {
+      sctx.globalAlpha = Math.min(1, b.flow * press);
+      sctx.drawImage(softTip(state.color, r), x - r, y - r, r * 2, r * 2);
+    } else if (b.kind === 'spray') {
+      sctx.fillStyle = state.color;
+      const dots = Math.ceil(r * r * 0.32), s = Math.max(1.5, r * 0.07);
+      for (let i = 0; i < dots; i++) {
+        const a = Math.random() * Math.PI * 2, d = r * Math.sqrt(Math.random());
+        sctx.globalAlpha = 0.6 + Math.random() * 0.4;
+        sctx.fillRect(x + Math.cos(a) * d, y + Math.sin(a) * d, s, s);
+      }
+    } else if (b.kind === 'sparkle') {
+      for (let i = 0; i < 2; i++) {
+        const a = Math.random() * Math.PI * 2, d = r * Math.sqrt(Math.random()), size = r * (0.15 + Math.random() * 0.45);
+        const px = x + Math.cos(a) * d, py = y + Math.sin(a) * d;
+        sctx.globalAlpha = 0.65 + Math.random() * 0.35;
+        sctx.fillStyle = shade(state.color, (Math.random() - 0.5) * 0.7);
+        sctx.beginPath();                       // a four-pointed star
+        for (let k = 0; k < 8; k++) {
+          const ang = k * Math.PI / 4, rad = k % 2 === 0 ? size : size * 0.28;
+          sctx[k ? 'lineTo' : 'moveTo'](px + Math.cos(ang) * rad, py + Math.sin(ang) * rad);
+        }
+        sctx.closePath(); sctx.fill();
+      }
+    }
+    sctx.globalAlpha = 1;
+  }
+
+  // Walks a quadratic curve and calls fn(x, y) about every `step` pixels.
+  function sampleCurve(p0, c, p1, step, fn) {
+    const len = Math.hypot(c.x - p0.x, c.y - p0.y) + Math.hypot(p1.x - c.x, p1.y - c.y);
+    const n = Math.max(1, Math.ceil(len / step));
+    for (let i = 1; i <= n; i++) {
+      const t = i / n, u = 1 - t;
+      fn(u * u * p0.x + 2 * u * t * c.x + t * t * p1.x, u * u * p0.y + 2 * u * t * c.y + t * t * p1.y);
+    }
+  }
+
   let stroke = null;
+  const pressureOf = (e) => (e.pointerType === 'pen' && e.pressure > 0 ? 0.3 + 0.7 * e.pressure : 1);
   colorCv.addEventListener('pointerdown', (e) => {
     if (!state.w || e.button > 0) return;
     const p = toCanvas(e);
@@ -195,38 +320,53 @@
     if (state.tool === 'pick') { pickColor(Math.floor(p.x), Math.floor(p.y)); return; }
     colorCv.setPointerCapture(e.pointerId);
     snapshot();
-    stroke = { last: p, mid: p };
-    cctx.globalCompositeOperation = state.tool === 'eraser' ? 'destination-out' : 'source-over';
-    cctx.fillStyle = cctx.strokeStyle = state.color;
-    cctx.lineCap = cctx.lineJoin = 'round';
-    const w = brushWidth(e, p);
-    cctx.beginPath(); cctx.arc(p.x, p.y, w / 2, 0, Math.PI * 2); cctx.fill();   // a tap leaves a dot
+    const b = state.tool === 'eraser' ? null : BRUSHES[state.brush];
+    const ctx = b ? sctx : cctx;
+    stroke = { last: p, mid: p, b, ctx };
+    if (b) strokeCv.style.opacity = b.alpha || 1; else cctx.globalCompositeOperation = 'destination-out';
+    ctx.fillStyle = ctx.strokeStyle = state.color;
+    ctx.lineCap = ctx.lineJoin = 'round';
+    const w = Math.max(1, state.size * p.k), press = pressureOf(e);
+    if (b && b.kind !== 'line') { stamp(b, p.x, p.y, w, press); return; }
+    const d = w * press * ((b && b.widen) || 1);
+    ctx.beginPath(); ctx.arc(p.x, p.y, d / 2, 0, Math.PI * 2); ctx.fill();   // a tap leaves a dot
   });
   colorCv.addEventListener('pointermove', (e) => {
     if (!stroke) return;
+    const { b, ctx } = stroke;
     const events = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
     for (const ev of (events.length ? events : [e])) {
-      const p = toCanvas(ev);
+      const p = toCanvas(ev), press = pressureOf(ev);
       const mid = { x: (stroke.last.x + p.x) / 2, y: (stroke.last.y + p.y) / 2 };
-      cctx.lineWidth = brushWidth(ev, p);
-      cctx.beginPath();
-      cctx.moveTo(stroke.mid.x, stroke.mid.y);
-      cctx.quadraticCurveTo(stroke.last.x, stroke.last.y, mid.x, mid.y);   // midpoint smoothing
-      cctx.stroke();
+      const w = Math.max(1, state.size * p.k);
+      if (b && b.kind !== 'line') {             // stamped brushes: dabs along the smoothed path
+        const step = Math.max(1, w * b.width / 2 * b.spacing);
+        sampleCurve(stroke.mid, stroke.last, mid, step, (x, y) => stamp(b, x, y, w, press));
+      } else {
+        ctx.lineWidth = w * press * ((b && b.widen) || 1);
+        ctx.beginPath();
+        ctx.moveTo(stroke.mid.x, stroke.mid.y);
+        ctx.quadraticCurveTo(stroke.last.x, stroke.last.y, mid.x, mid.y);   // midpoint smoothing
+        ctx.stroke();
+      }
       stroke.last = p; stroke.mid = mid;
     }
   });
   const endStroke = () => {
     if (!stroke) return;
-    stroke = null; cctx.globalCompositeOperation = 'source-over'; scheduleSave();
+    if (stroke.b) {                             // merge the stroke into the color layer at its overall opacity
+      cctx.globalAlpha = stroke.b.alpha || 1;
+      cctx.drawImage(strokeCv, 0, 0);
+      cctx.globalAlpha = 1;
+      sctx.clearRect(0, 0, state.w, state.h);
+      strokeCv.style.opacity = 1;
+    } else {
+      cctx.globalCompositeOperation = 'source-over';
+    }
+    stroke = null; scheduleSave();
   };
   colorCv.addEventListener('pointerup', endStroke);
   colorCv.addEventListener('pointercancel', endStroke);
-
-  function brushWidth(e, p) {
-    const pressure = e.pointerType === 'pen' && e.pressure > 0 ? 0.3 + 0.7 * e.pressure : 1;
-    return Math.max(1, state.size * p.k * pressure);
-  }
 
   // Fill is bounded by the line art alone, so it works the same on any existing coloring.
   function bucketFill(sx, sy) {
@@ -273,6 +413,8 @@
       for (const i of add) region[i] = 1;
     }
     snapshot();
+    const brush = BRUSHES[state.brush];
+    if (brush.textured) { texturedFill(region, brush); scheduleSave(); return; }
     const img = cctx.getImageData(0, 0, w, h), d = img.data;
     const [r, g, b] = hexToRgb(state.color);
     for (let i = 0, p = 0; i < region.length; i++, p += 4) {
@@ -280,6 +422,31 @@
     }
     cctx.putImageData(img, 0, 0);
     scheduleSave();
+  }
+
+  // Pencil and crayon fills clear the region and lay the paper grain over it, so the page looks hand-colored.
+  function texturedFill(region, brush) {
+    const { w, h } = state;
+    const mask = document.createElement('canvas'); mask.width = w; mask.height = h;
+    const mctx = mask.getContext('2d'), mi = mctx.createImageData(w, h);
+    for (let i = 0; i < region.length; i++) if (region[i]) mi.data[i * 4 + 3] = 255;
+    mctx.putImageData(mi, 0, 0);
+    cctx.save(); cctx.globalCompositeOperation = 'destination-out'; cctx.drawImage(mask, 0, 0); cctx.restore();
+    const tex = document.createElement('canvas'); tex.width = w; tex.height = h;
+    const t = tex.getContext('2d');
+    t.fillStyle = grainPattern(brush.grain, state.color);
+    // Stretch the grain into diagonal strokes, twice at slightly different angles, like shading by hand.
+    const big = (w + h) * 2, stretch = brush.grain === 'crayon' ? 3 : 2.2, angle = brush.grain === 'crayon' ? -0.55 : 0.7;
+    [[angle, 0], [angle + 0.45, 61]].forEach(([a, off]) => {
+      t.setTransform(Math.cos(a) * stretch, Math.sin(a) * stretch, -Math.sin(a), Math.cos(a), off, off);
+      t.globalAlpha = off ? 0.7 : 1;
+      t.fillRect(-big, -big, big * 2, big * 2);
+    });
+    t.globalAlpha = 1;
+    t.setTransform(1, 0, 0, 1, 0, 0);
+    t.globalCompositeOperation = 'destination-in';
+    t.drawImage(mask, 0, 0);
+    cctx.drawImage(tex, 0, 0);
   }
 
   function pickColor(x, y) {
@@ -306,6 +473,20 @@
   }
 
   document.querySelectorAll('.tool').forEach((b) => b.addEventListener('click', () => setTool(b.dataset.tool)));
+  function setBrush(id) {
+    if (!BRUSHES[id]) return;
+    state.brush = id;
+    document.querySelectorAll('.chip').forEach((c) => c.classList.toggle('active', c.dataset.brush === id));
+    if (state.tool === 'eraser' || state.tool === 'pick') setTool('brush');
+    try { localStorage.setItem('cb:brush', id); } catch (e) { /* ignore */ }
+  }
+  for (const [id, br] of Object.entries(BRUSHES)) {
+    const c = document.createElement('button');
+    c.className = 'chip'; c.dataset.brush = id; c.title = br.label; c.innerHTML = `<span>${br.icon}</span><small>${br.label}</small>`;
+    c.addEventListener('click', () => setBrush(id));
+    $('brushBtns').appendChild(c);
+  }
+  try { setBrush(localStorage.getItem('cb:brush') || state.brush); } catch (e) { setBrush(state.brush); }
   $('size').addEventListener('input', (e) => { state.size = +e.target.value; });
   $('customColor').addEventListener('input', (e) => setColor(e.target.value));
   COLORS.forEach((c) => {
@@ -534,7 +715,7 @@
       items: mine.filter((r) => r.cat === cat).map((r) => ({ key: 'u:' + r.id, title: r.name, src: blobUrl(r), rec: r }))
     }));
     const builtIn = catalog.map((c) => ({
-      id: c.id, name: c.name,
+      id: c.id, name: c.name, icon: c.icon,
       items: c.pages.map((p) => ({ key: p.file, title: p.title, src: 'pages/' + p.file }))
     }));
     return [...mineCats, ...builtIn];
@@ -569,45 +750,123 @@
   }
 
   let navId = 0;                                // lets a slow render notice the person has already moved on
+
+  // Pages worth suggesting by time of year: month (0-11) -> category ids.
+  const SEASONS = {
+    0: ['christmas', 'easy'], 1: ['other-holidays', 'cute-animals'], 2: ['other-holidays', 'easter'], 3: ['easter', 'nature'],
+    4: ['nature', 'cute-animals'], 5: ['ocean', 'food'], 6: ['ocean', 'vehicles'], 7: ['vehicles', 'space'],
+    8: ['halloween', 'thanksgiving'], 9: ['halloween'], 10: ['thanksgiving'], 11: ['christmas']
+  };
+  function recentKeys() {
+    try { return JSON.parse(localStorage.getItem('cb:recent') || '[]'); } catch (e) { return []; }
+  }
+  function rememberRecent(key) {
+    try { localStorage.setItem('cb:recent', JSON.stringify([key, ...recentKeys().filter((k) => k !== key)].slice(0, 12))); } catch (e) { /* ignore */ }
+  }
+  const hueOf = (id) => [...id].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 360, 7);
+
+  // A picture card: thumbnail (with your coloring behind the ink if you have colored it), title, and a badge.
+  function cardFor(it, mini) {
+    const wrap = el('div', 'cardwrap' + (mini ? ' mini' : ''));
+    const b = el('button', 'card');
+    const img = el('img'); img.src = it.src; img.alt = ''; img.loading = 'lazy'; withProgressPreview(img, it);
+    b.append(img, el('span', '', it.title));
+    if (progressKeys.has(it.key)) b.appendChild(el('i', 'badge', '🎨'));
+    b.addEventListener('click', () => go('p/' + enc(it.key)));
+    wrap.appendChild(b);
+    if (it.rec) {
+      const del = el('button', 'del', '×'); del.title = 'Delete this picture and its coloring';
+      del.addEventListener('click', () => removeUpload(it.rec));
+      wrap.appendChild(del);
+    }
+    return wrap;
+  }
+  function strip(title, items) {
+    const sec = el('section', 'band');
+    sec.appendChild(el('h3', '', title));
+    const row = el('div', 'strip');
+    items.forEach((it) => row.appendChild(cardFor(it, true)));
+    sec.appendChild(row);
+    return sec;
+  }
+
   async function showHome() {
     const id = ++navId;
     showView('Coloring Book');
     await flushSave();                          // so "colored" badges and previews are current
     if (id !== navId) return;
     const box = $('home'); box.innerHTML = '';
-
-    const hero = el('div', 'hero');
-    const logo = el('img'); logo.src = 'icon.svg'; logo.alt = ''; logo.width = logo.height = 72;
-    const words = el('div'); words.append(el('h2', '', 'Coloring Book'), el('p', '', 'Pick something to color'));
-    hero.append(logo, words); box.appendChild(hero);
+    document.title = 'Coloring Book';
 
     const cats = launcherCategories();
+    const all = cats.flatMap((c) => c.items.map((it) => ({ ...it, cat: c.name })));
+    const byKey = new Map(all.map((it) => [it.key, it]));
+
+    const hero = el('div', 'hero');
+    const logo = el('img'); logo.src = 'icon.svg'; logo.alt = ''; logo.width = logo.height = 64;
+    const words = el('div'); words.append(el('h2', '', 'Coloring Book'), el('p', '', `${all.length} pictures to color, plus your own`));
+    hero.append(logo, words); box.appendChild(hero);
+
+    const bar = el('div', 'homebar');
+    const search = el('input'); search.type = 'search'; search.placeholder = 'Search pictures…'; search.setAttribute('aria-label', 'Search pictures');
+    const surprise = el('button', 'surprise', '🎲 Surprise me');
+    surprise.addEventListener('click', () => {
+      const fresh = all.filter((it) => !progressKeys.has(it.key));
+      const pool = fresh.length ? fresh : all;
+      if (pool.length) go('p/' + enc(pool[Math.floor(Math.random() * pool.length)].key));
+    });
+    bar.append(search, surprise); box.appendChild(bar);
+
+    const browse = el('div'), results = el('div', 'cards'); results.hidden = true;
+    box.append(browse, results);
+    search.addEventListener('input', () => {
+      const q = search.value.trim().toLowerCase();
+      results.hidden = !q; browse.hidden = !!q;
+      if (!q) return;
+      results.innerHTML = '';
+      const hits = all.filter((it) => it.title.toLowerCase().includes(q) || it.cat.toLowerCase().includes(q));
+      if (!hits.length) results.appendChild(el('p', 'hint', `Nothing found for "${search.value.trim()}".`));
+      hits.slice(0, 60).forEach((it) => results.appendChild(cardFor(it)));
+    });
+
     let last = null;
     try { last = localStorage.getItem('cb:last'); } catch (e) { /* ignore */ }
-    const lastItem = cats.flatMap((c) => c.items).find((it) => it.key === last);
+    const lastItem = byKey.get(last);
     if (lastItem) {
       const b = el('button', 'continue');
       const img = el('img'); img.src = lastItem.src; img.alt = ''; withProgressPreview(img, lastItem);
-      const t = el('div'); t.append(el('small', '', 'Continue coloring'), el('strong', '', lastItem.title));
+      const t = el('div'); t.append(el('small', '', 'Continue coloring'), el('strong', '', lastItem.title), el('small', '', lastItem.cat));
       b.append(img, t); b.addEventListener('click', () => go('p/' + enc(lastItem.key)));
-      box.appendChild(b);
+      browse.appendChild(b);
     }
 
+    const recent = recentKeys().filter((k) => k !== last && progressKeys.has(k)).map((k) => byKey.get(k)).filter(Boolean).slice(0, 10);
+    if (recent.length) browse.appendChild(strip('🖍️ Pick up where you left off', recent));
+
+    const seasonIds = SEASONS[new Date().getMonth()] || [];
+    const seasonal = seasonIds.map((cid) => cats.find((c) => c.id === cid)).filter(Boolean)
+      .flatMap((c) => c.items.map((it) => ({ ...it, cat: c.name }))).filter((it) => !progressKeys.has(it.key)).slice(0, 10);
+    if (seasonal.length) {
+      const first = cats.find((c) => c.id === seasonIds[0]);
+      browse.appendChild(strip(`${(first && first.icon) || '✨'} Right now: ${seasonIds.map((cid) => (cats.find((c) => c.id === cid) || {}).name).filter(Boolean).join(' & ')}`, seasonal));
+    }
+
+    const band = el('section', 'band'); band.appendChild(el('h3', '', 'Pick a category'));
     const grid = el('div', 'tiles');
     const add = el('button', 'tile add');
     add.append(el('span', 'plus', '+'), el('b', '', 'Add your own picture'), el('small', '', 'Upload a photo or drawing'));
     add.addEventListener('click', () => $('fileInput').click());
     grid.appendChild(add);
     for (const cat of cats) {
-      const b = el('button', 'tile');
+      const b = el('button', 'tile'); b.style.setProperty('--h', hueOf(cat.id));
       const collage = el('div', 'collage');
       for (const it of cat.items.slice(0, 4)) { const im = el('img'); im.src = it.src; im.alt = ''; im.loading = 'lazy'; collage.appendChild(im); }
-      b.append(collage, el('b', '', (cat.star ? '★ ' : '') + cat.name), el('small', '', `${cat.items.length} ${cat.items.length === 1 ? 'picture' : 'pictures'}`));
+      const head = el('div', 'tilehead'); head.append(el('span', 'ico', cat.star ? '★' : cat.icon || '🎨'), el('b', '', cat.name));
+      b.append(collage, head, el('small', '', `${cat.items.length} ${cat.items.length === 1 ? 'picture' : 'pictures'}`));
       b.addEventListener('click', () => go('c/' + enc(cat.id)));
       grid.appendChild(b);
     }
-    box.appendChild(grid);
-    document.title = 'Coloring Book';
+    band.appendChild(grid); browse.appendChild(band);
   }
 
   async function showCategory(id) {
@@ -620,24 +879,10 @@
     const box = $('home'); box.innerHTML = '';
     const bar = el('div', 'catbar');
     const back = el('button', '', '← All categories'); back.addEventListener('click', () => go('home'));
-    bar.append(back, el('h2', '', (cat.star ? '★ ' : '') + cat.name));
+    bar.append(back, el('h2', '', `${cat.star ? '★' : cat.icon || '🎨'} ${cat.name}`));
     box.appendChild(bar);
     const grid = el('div', 'cards');
-    for (const it of cat.items) {
-      const wrap = el('div', 'cardwrap');
-      const b = el('button', 'card');
-      const img = el('img'); img.src = it.src; img.alt = ''; img.loading = 'lazy'; withProgressPreview(img, it);
-      b.append(img, el('span', '', it.title));
-      if (progressKeys.has(it.key)) b.appendChild(el('i', 'badge', '🎨'));
-      b.addEventListener('click', () => go('p/' + enc(it.key)));
-      wrap.appendChild(b);
-      if (it.rec) {
-        const del = el('button', 'del', '×'); del.title = 'Delete this picture and its coloring';
-        del.addEventListener('click', () => removeUpload(it.rec));
-        wrap.appendChild(del);
-      }
-      grid.appendChild(wrap);
-    }
+    cat.items.forEach((it) => grid.appendChild(cardFor(it)));
     box.appendChild(grid);
   }
 

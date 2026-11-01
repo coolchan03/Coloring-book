@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="1000" height="800">
+<rect width="1000" height="800" fill="#fff"/>
+<g fill="none" stroke="#000" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+<ellipse cx="500" cy="400" rx="355" ry="355" fill="#fff"/>
+<ellipse cx="830.0" cy="400.0" rx="30" ry="30" fill="#fff"/>
+<ellipse cx="810.0985648593498" cy="512.8666472974706" rx="30" ry="30" fill="#fff"/>
+<ellipse cx="752.7946662292627" cy="612.119911196558" rx="30" ry="30" fill="#fff"/>
+<ellipse cx="665.0" cy="685.7883832488648" rx="30" ry="30" fill="#fff"/>
+<ellipse cx="557.303898630087" cy="724.9865584940287" rx="30" ry="30" fill="#fff"/>
+<ellipse cx="442.696101369913" cy="724.9865584940287" rx="30" ry="30" fill="#fff"/>
+<ellipse cx="335.0000000000001" cy="685.7883832488648" rx="30" ry="30" fill="#fff"/>
+<ellipse cx="247.2053337707373" cy="612.1199111965581" rx="30" ry="30" fill="#fff"/>
+<ellipse cx="189.90143514065028" cy="512.8666472974708" rx="30" ry="30" fill="#fff"/>
+<ellipse cx="170.0" cy="400.00000000000006" rx="30" ry="30" fill="#fff"/>
+<ellipse cx="189.90143514065022" cy="287.13335270252935" rx="30" ry="30" fill="#fff"/>
+<ellipse cx="247.20533377073727" cy="187.88008880344205" rx="30" ry="30" fill="#fff"/>
+<ellipse cx="334.9999999999999" cy="114.21161675113535" rx="30" ry="30" fill="#fff"/>
+<ellipse cx="442.696101369913" cy="75.01344150597134" rx="30" ry="30" fill="#fff"/>
+<ellipse cx="557.3038986300869" cy="75.01344150597134" rx="30" ry="30" fill="#fff"/>
+<ellipse cx="665.0" cy="114.21161675113524" rx="30" ry="30" fill="#fff"/>
+<ellipse cx="752.7946662292627" cy="187.88008880344194" rx="30" ry="30" fill="#fff"/>
+<ellipse cx="810.0985648593498" cy="287.13335270252935" rx="30" ry="30" fill="#fff"/>
+<ellipse cx="500" cy="400" rx="330" ry="330" fill="#fff"/>
+<ellipse cx="500" cy="400" rx="265" ry="265" fill="#fff"/>
+<ellipse cx="500" cy="400" rx="170" ry="170"/>
+<g transform="rotate(0.000 500 400)"><path d="M500 380 C534 330.0 534 300 500 280 C466 300 466 330.0 500 380Z" fill="#fff"/>
+</g>
+<g transform="rotate(45.000 500 400)"><path d="M500 380 C534 330.0 534 300 500 280 C466 300 466 330.0 500 380Z" fill="#fff"/>
+</g>
+<g transform="rotate(90.000 500 400)"><path d="M500 380 C534 330.0 534 300 500 280 C466 300 466 330.0 500 380Z" fill="#fff"/>
+</g>
+<g transform="rotate(135.000 500 400)"><path d="M500 380 C534 330.0 534 300 500 280 C466 300 466 330.0 500 380Z" fill="#fff"/>
+</g>
+<g transform="rotate(180.000 500 400)"><path d="M500 380 C534 330.0 534 300 500 280 C466 300 466 330.0 500 380Z" fill="#fff"/>
+</g>
+<g transform="rotate(225.000 500 400)"><path d="M500 380 C534 330.0 534 300 500 280 C466 300 466 330.0 500 380Z" fill="#fff"/>
+</g>
+<g transform="rotate(270.000 500 400)"><path d="M500 380 C534 330.0 534 300 500 280 C466 300 466 330.0 500 380Z" fill="#fff"/>
+</g>
+<g transform="rotate(315.000 500 400)"><path d="M500 380 C534 330.0 534 300 500 280 C466 300 466 330.0 500 380Z" fill="#fff"/>
+</g>
+<ellipse cx="500" cy="400" rx="28" ry="28"/>
+
+</g>
+</svg>

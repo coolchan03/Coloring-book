@@ -3,6 +3,7 @@
     {
       "id": "easy",
       "name": "Easy",
+      "icon": "\ud83c\udf08",
       "pages": [
         {
           "title": "Apple",
@@ -55,12 +56,195 @@
       ]
     },
     {
+      "id": "cute-animals",
+      "name": "Cute Animals",
+      "icon": "\ud83d\udc3b",
+      "pages": [
+        {
+          "title": "Bear",
+          "file": "cute-animals/bear.svg"
+        },
+        {
+          "title": "Bee",
+          "file": "cute-animals/bee.svg"
+        },
+        {
+          "title": "Dog",
+          "file": "cute-animals/dog.svg"
+        },
+        {
+          "title": "Duck",
+          "file": "cute-animals/duck.svg"
+        },
+        {
+          "title": "Elephant",
+          "file": "cute-animals/elephant.svg"
+        },
+        {
+          "title": "Frog",
+          "file": "cute-animals/frog.svg"
+        },
+        {
+          "title": "Ladybug",
+          "file": "cute-animals/ladybug.svg"
+        },
+        {
+          "title": "Lion",
+          "file": "cute-animals/lion.svg"
+        },
+        {
+          "title": "Owl",
+          "file": "cute-animals/owl.svg"
+        },
+        {
+          "title": "Penguin",
+          "file": "cute-animals/penguin.svg"
+        },
+        {
+          "title": "Pig",
+          "file": "cute-animals/pig.svg"
+        },
+        {
+          "title": "Turtle",
+          "file": "cute-animals/turtle.svg"
+        }
+      ]
+    },
+    {
+      "id": "ocean",
+      "name": "Ocean",
+      "icon": "\ud83d\udc19",
+      "pages": [
+        {
+          "title": "Crab",
+          "file": "ocean/crab.svg"
+        },
+        {
+          "title": "Jellyfish",
+          "file": "ocean/jellyfish.svg"
+        },
+        {
+          "title": "Octopus",
+          "file": "ocean/octopus.svg"
+        },
+        {
+          "title": "Shell",
+          "file": "ocean/shell.svg"
+        },
+        {
+          "title": "Starfish",
+          "file": "ocean/starfish.svg"
+        },
+        {
+          "title": "Whale",
+          "file": "ocean/whale.svg"
+        }
+      ]
+    },
+    {
+      "id": "space",
+      "name": "Space",
+      "icon": "\ud83d\ude80",
+      "pages": [
+        {
+          "title": "Alien",
+          "file": "space/alien.svg"
+        },
+        {
+          "title": "Moon And Stars",
+          "file": "space/moon-and-stars.svg"
+        },
+        {
+          "title": "Ringed Planet",
+          "file": "space/ringed-planet.svg"
+        },
+        {
+          "title": "Ufo",
+          "file": "space/ufo.svg"
+        }
+      ]
+    },
+    {
+      "id": "food",
+      "name": "Food",
+      "icon": "\ud83c\udf55",
+      "pages": [
+        {
+          "title": "Burger",
+          "file": "food/burger.svg"
+        },
+        {
+          "title": "Cherries",
+          "file": "food/cherries.svg"
+        },
+        {
+          "title": "Donut",
+          "file": "food/donut.svg"
+        },
+        {
+          "title": "Pizza",
+          "file": "food/pizza.svg"
+        },
+        {
+          "title": "Strawberry",
+          "file": "food/strawberry.svg"
+        },
+        {
+          "title": "Watermelon",
+          "file": "food/watermelon.svg"
+        }
+      ]
+    },
+    {
+      "id": "vehicles",
+      "name": "Vehicles",
+      "icon": "\ud83d\ude82",
+      "pages": [
+        {
+          "title": "Airplane",
+          "file": "vehicles/airplane.svg"
+        },
+        {
+          "title": "Boat",
+          "file": "vehicles/boat.svg"
+        },
+        {
+          "title": "Hot Air Balloon",
+          "file": "vehicles/hot-air-balloon.svg"
+        },
+        {
+          "title": "Train",
+          "file": "vehicles/train.svg"
+        }
+      ]
+    },
+    {
+      "id": "birthday",
+      "name": "Birthday",
+      "icon": "\ud83c\udf82",
+      "pages": [
+        {
+          "title": "Birthday Cake",
+          "file": "birthday/birthday-cake.svg"
+        },
+        {
+          "title": "Party Hat",
+          "file": "birthday/party-hat.svg"
+        }
+      ]
+    },
+    {
       "id": "halloween",
       "name": "Halloween",
+      "icon": "\ud83c\udf83",
       "pages": [
         {
           "title": "Bat",
           "file": "halloween/bat.svg"
+        },
+        {
+          "title": "Black Cat",
+          "file": "halloween/black-cat.svg"
         },
         {
           "title": "Candy Corn",
@@ -69,6 +253,10 @@
         {
           "title": "Ghost",
           "file": "halloween/ghost.svg"
+        },
+        {
+          "title": "Haunted House",
+          "file": "halloween/haunted-house.svg"
         },
         {
           "title": "Jack O Lantern",
@@ -87,6 +275,7 @@
     {
       "id": "thanksgiving",
       "name": "Thanksgiving",
+      "icon": "\ud83e\udd83",
       "pages": [
         {
           "title": "Acorn",
@@ -105,6 +294,10 @@
           "file": "thanksgiving/pilgrim-hat.svg"
         },
         {
+          "title": "Pumpkin Pie",
+          "file": "thanksgiving/pumpkin-pie.svg"
+        },
+        {
           "title": "Pumpkin",
           "file": "thanksgiving/pumpkin.svg"
         },
@@ -117,7 +310,12 @@
     {
       "id": "christmas",
       "name": "Christmas",
+      "icon": "\ud83c\udf84",
       "pages": [
+        {
+          "title": "Candy Cane",
+          "file": "christmas/candy-cane.svg"
+        },
         {
           "title": "Christmas Tree",
           "file": "christmas/christmas-tree.svg"
@@ -131,18 +329,31 @@
           "file": "christmas/ornament.svg"
         },
         {
+          "title": "Reindeer",
+          "file": "christmas/reindeer.svg"
+        },
+        {
           "title": "Snowflake",
           "file": "christmas/snowflake.svg"
         },
         {
           "title": "Snowman",
           "file": "christmas/snowman.svg"
+        },
+        {
+          "title": "Stocking",
+          "file": "christmas/stocking.svg"
+        },
+        {
+          "title": "Wreath",
+          "file": "christmas/wreath.svg"
         }
       ]
     },
     {
       "id": "easter",
       "name": "Easter",
+      "icon": "\ud83d\udc30",
       "pages": [
         {
           "title": "Baby Chick",
@@ -151,6 +362,10 @@
         {
           "title": "Bunny",
           "file": "easter/bunny.svg"
+        },
+        {
+          "title": "Carrot",
+          "file": "easter/carrot.svg"
         },
         {
           "title": "Easter Basket",
@@ -169,6 +384,7 @@
     {
       "id": "other-holidays",
       "name": "Other Holidays",
+      "icon": "\ud83d\udc9d",
       "pages": [
         {
           "title": "Love Letter",
@@ -185,8 +401,116 @@
       ]
     },
     {
+      "id": "nature",
+      "name": "Nature",
+      "icon": "\ud83c\udf3b",
+      "pages": [
+        {
+          "title": "Apple Tree",
+          "file": "nature/apple-tree.svg"
+        },
+        {
+          "title": "Cactus",
+          "file": "nature/cactus.svg"
+        },
+        {
+          "title": "Flower",
+          "file": "nature/flower.svg"
+        },
+        {
+          "title": "Mushroom",
+          "file": "nature/mushroom.svg"
+        },
+        {
+          "title": "Sunflower",
+          "file": "nature/sunflower.svg"
+        },
+        {
+          "title": "Umbrella",
+          "file": "nature/umbrella.svg"
+        }
+      ]
+    },
+    {
+      "id": "animals",
+      "name": "Animals",
+      "icon": "\ud83e\udd8b",
+      "pages": [
+        {
+          "title": "Butterfly",
+          "file": "animals/butterfly.svg"
+        },
+        {
+          "title": "Cat",
+          "file": "animals/cat.svg"
+        },
+        {
+          "title": "Fish",
+          "file": "animals/fish.svg"
+        }
+      ]
+    },
+    {
+      "id": "scenes",
+      "name": "Scenes",
+      "icon": "\ud83c\udfe1",
+      "pages": [
+        {
+          "title": "Little House",
+          "file": "scenes/little-house.svg"
+        }
+      ]
+    },
+    {
+      "id": "patterns",
+      "name": "Patterns",
+      "icon": "\ud83d\udd37",
+      "pages": [
+        {
+          "title": "Geometric Tiles",
+          "file": "patterns/geometric-tiles.svg"
+        },
+        {
+          "title": "Waves",
+          "file": "patterns/waves.svg"
+        }
+      ]
+    },
+    {
+      "id": "mandalas",
+      "name": "Mandalas",
+      "icon": "\ud83c\udf00",
+      "pages": [
+        {
+          "title": "Blossom Mandala",
+          "file": "mandalas/blossom-mandala.svg"
+        },
+        {
+          "title": "Flower Of Life",
+          "file": "mandalas/flower-of-life.svg"
+        },
+        {
+          "title": "Lotus Mandala",
+          "file": "mandalas/lotus-mandala.svg"
+        },
+        {
+          "title": "Spiky Star Mandala",
+          "file": "mandalas/spiky-star-mandala.svg"
+        },
+        {
+          "title": "Star Mandala",
+          "file": "mandalas/star-mandala.svg"
+        },
+        {
+          "title": "Sunburst Mandala",
+          "file": "mandalas/sunburst-mandala.svg"
+        }
+      ]
+    },
+    {
       "id": "prehistoric-animals",
       "name": "Prehistoric Animals",
+      "icon": "\ud83e\udd95",
       "pages": [
         {
           "title": "Adapid Primate",
@@ -267,80 +591,6 @@
         {
           "title": "Shasta Ground Sloth",
           "file": "prehistoric-animals/shasta-ground-sloth.png"
-        }
-      ]
-    },
-    {
-      "id": "animals",
-      "name": "Animals",
-      "pages": [
-        {
-          "title": "Butterfly",
-          "file": "animals/butterfly.svg"
-        },
-        {
-          "title": "Cat",
-          "file": "animals/cat.svg"
-        },
-        {
-          "title": "Fish",
-          "file": "animals/fish.svg"
-        }
-      ]
-    },
-    {
-      "id": "mandalas",
-      "name": "Mandalas",
-      "pages": [
-        {
-          "title": "Blossom Mandala",
-          "file": "mandalas/blossom-mandala.svg"
-        },
-        {
-          "title": "Flower Of Life",
-          "file": "mandalas/flower-of-life.svg"
-        },
-        {
-          "title": "Star Mandala",
-          "file": "mandalas/star-mandala.svg"
-        }
-      ]
-    },
-    {
-      "id": "nature",
-      "name": "Nature",
-      "pages": [
-        {
-          "title": "Apple Tree",
-          "file": "nature/apple-tree.svg"
-        },
-        {
-          "title": "Flower",
-          "file": "nature/flower.svg"
-        }
-      ]
-    },
-    {
-      "id": "patterns",
-      "name": "Patterns",
-      "pages": [
-        {
-          "title": "Geometric Tiles",
-          "file": "patterns/geometric-tiles.svg"
-        },
-        {
-          "title": "Waves",
-          "file": "patterns/waves.svg"
-        }
-      ]
-    },
-    {
-      "id": "scenes",
-      "name": "Scenes",
-      "pages": [
-        {
-          "title": "Little House",
-          "file": "scenes/little-house.svg"
         }
       ]
     }
