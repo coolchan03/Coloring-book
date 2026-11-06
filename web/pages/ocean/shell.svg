@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="1000" height="800">
+<rect width="1000" height="800" fill="#fff"/>
+<g fill="none" stroke="#000" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+<path d="M500 700 C260 600 200 400 260 300 C340 180 660 180 740 300 C800 400 740 600 500 700Z" fill="#fff"/>
+<clipPath id="m3"><path d="M500 700 C260 600 200 400 260 300 C340 180 660 180 740 300 C800 400 740 600 500 700Z"/></clipPath><g clip-path="url(#m3)"><path d="M500 700 L190 536"/>
+<path d="M500 700 L247 391"/>
+<path d="M500 700 L335 284"/>
+<path d="M500 700 L443 227"/>
+<path d="M500 700 L557 227"/>
+<path d="M500 700 L665 284"/>
+<path d="M500 700 L753 391"/>
+</g>
+<path d="M430 700 H570 L555 750 H445Z" fill="#fff"/>
+
+</g>
+</svg>

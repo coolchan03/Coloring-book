@@ -18,7 +18,7 @@ android {
         // Every CI run gets a higher versionCode so a new APK installs over the old one.
         val code = providers.environmentVariable("GITHUB_RUN_NUMBER").orNull?.toIntOrNull() ?: 1
         versionCode = code
-        versionName = "1.0.$code"
+        versionName = "1.1.$code"
     }
 
     // A fixed key (committed on purpose: this is a personal app, not a store release) so that

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="1000" height="800">
+<rect width="1000" height="800" fill="#fff"/>
+<g fill="none" stroke="#000" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+<g transform="rotate(0.000 500 410)"><ellipse cx="500" cy="190" rx="62" ry="62" fill="#fff"/>
+</g>
+<g transform="rotate(25.714 500 410)"><ellipse cx="500" cy="190" rx="62" ry="62" fill="#fff"/>
+</g>
+<g transform="rotate(51.429 500 410)"><ellipse cx="500" cy="190" rx="62" ry="62" fill="#fff"/>
+</g>
+<g transform="rotate(77.143 500 410)"><ellipse cx="500" cy="190" rx="62" ry="62" fill="#fff"/>
+</g>
+<g transform="rotate(102.857 500 410)"><ellipse cx="500" cy="190" rx="62" ry="62" fill="#fff"/>
+</g>
+<g transform="rotate(128.571 500 410)"><ellipse cx="500" cy="190" rx="62" ry="62" fill="#fff"/>
+</g>
+<g transform="rotate(154.286 500 410)"><ellipse cx="500" cy="190" rx="62" ry="62" fill="#fff"/>
+</g>
+<g transform="rotate(180.000 500 410)"><ellipse cx="500" cy="190" rx="62" ry="62" fill="#fff"/>
+</g>
+<g transform="rotate(205.714 500 410)"><ellipse cx="500" cy="190" rx="62" ry="62" fill="#fff"/>
+</g>
+<g transform="rotate(231.429 500 410)"><ellipse cx="500" cy="190" rx="62" ry="62" fill="#fff"/>
+</g>
+<g transform="rotate(257.143 500 410)"><ellipse cx="500" cy="190" rx="62" ry="62" fill="#fff"/>
+</g>
+<g transform="rotate(282.857 500 410)"><ellipse cx="500" cy="190" rx="62" ry="62" fill="#fff"/>
+</g>
+<g transform="rotate(308.571 500 410)"><ellipse cx="500" cy="190" rx="62" ry="62" fill="#fff"/>
+</g>
+<g transform="rotate(334.286 500 410)"><ellipse cx="500" cy="190" rx="62" ry="62" fill="#fff"/>
+</g>
+<ellipse cx="500" cy="410" rx="165" ry="175" fill="#fff"/>
+<ellipse cx="430" cy="385" rx="22" ry="22"/>
+<circle cx="434" cy="388" r="11" fill="#000"/>
+<ellipse cx="570" cy="385" rx="22" ry="22"/>
+<circle cx="566" cy="388" r="11" fill="#000"/>
+<path d="M468 450 H532 L500 485Z" fill="#fff"/>
+<path d="M500 485 V520 M500 520 Q465 560 430 535 M500 520 Q535 560 570 535"/>
+<path d="M300 280 L270 200 L360 245Z" fill="#fff"/>
+<path d="M700 280 L730 200 L640 245Z" fill="#fff"/>
+
+</g>
+</svg>

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="1000" height="800">
+<rect width="1000" height="800" fill="#fff"/>
+<g fill="none" stroke="#000" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+<g transform="rotate(0.000 500 400)"><path d="M500 250 C542 180.0 542 130 500 110 C458 130 458 180.0 500 250Z" fill="#fff"/>
+</g>
+<g transform="rotate(22.500 500 400)"><path d="M500 250 C542 180.0 542 130 500 110 C458 130 458 180.0 500 250Z" fill="#fff"/>
+</g>
+<g transform="rotate(45.000 500 400)"><path d="M500 250 C542 180.0 542 130 500 110 C458 130 458 180.0 500 250Z" fill="#fff"/>
+</g>
+<g transform="rotate(67.500 500 400)"><path d="M500 250 C542 180.0 542 130 500 110 C458 130 458 180.0 500 250Z" fill="#fff"/>
+</g>
+<g transform="rotate(90.000 500 400)"><path d="M500 250 C542 180.0 542 130 500 110 C458 130 458 180.0 500 250Z" fill="#fff"/>
+</g>
+<g transform="rotate(112.500 500 400)"><path d="M500 250 C542 180.0 542 130 500 110 C458 130 458 180.0 500 250Z" fill="#fff"/>
+</g>
+<g transform="rotate(135.000 500 400)"><path d="M500 250 C542 180.0 542 130 500 110 C458 130 458 180.0 500 250Z" fill="#fff"/>
+</g>
+<g transform="rotate(157.500 500 400)"><path d="M500 250 C542 180.0 542 130 500 110 C458 130 458 180.0 500 250Z" fill="#fff"/>
+</g>
+<g transform="rotate(180.000 500 400)"><path d="M500 250 C542 180.0 542 130 500 110 C458 130 458 180.0 500 250Z" fill="#fff"/>
+</g>
+<g transform="rotate(202.500 500 400)"><path d="M500 250 C542 180.0 542 130 500 110 C458 130 458 180.0 500 250Z" fill="#fff"/>
+</g>
+<g transform="rotate(225.000 500 400)"><path d="M500 250 C542 180.0 542 130 500 110 C458 130 458 180.0 500 250Z" fill="#fff"/>
+</g>
+<g transform="rotate(247.500 500 400)"><path d="M500 250 C542 180.0 542 130 500 110 C458 130 458 180.0 500 250Z" fill="#fff"/>
+</g>
+<g transform="rotate(270.000 500 400)"><path d="M500 250 C542 180.0 542 130 500 110 C458 130 458 180.0 500 250Z" fill="#fff"/>
+</g>
+<g transform="rotate(292.500 500 400)"><path d="M500 250 C542 180.0 542 130 500 110 C458 130 458 180.0 500 250Z" fill="#fff"/>
+</g>
+<g transform="rotate(315.000 500 400)"><path d="M500 250 C542 180.0 542 130 500 110 C458 130 458 180.0 500 250Z" fill="#fff"/>
+</g>
+<g transform="rotate(337.500 500 400)"><path d="M500 250 C542 180.0 542 130 500 110 C458 130 458 180.0 500 250Z" fill="#fff"/>
+</g>
+<ellipse cx="500" cy="400" rx="150" ry="150" fill="#fff"/>
+<ellipse cx="500" cy="400" rx="295" ry="295"/>
+<ellipse cx="726.992569177931" cy="460.8224755990924" rx="16" ry="16" fill="#fff"/>
+<ellipse cx="560.8224755990924" cy="626.992569177931" rx="16" ry="16" fill="#fff"/>
+<ellipse cx="333.82990642116135" cy="566.1700935788386" rx="16" ry="16" fill="#fff"/>
+<ellipse cx="273.00743082206895" cy="339.1775244009076" rx="16" ry="16" fill="#fff"/>
+<ellipse cx="439.17752440090766" cy="173.00743082206895" rx="16" ry="16" fill="#fff"/>
+<ellipse cx="666.1700935788386" cy="233.8299064211613" rx="16" ry="16" fill="#fff"/>
+<path d="M500 690 C420 640 360 700 360 740 C420 770 470 740 500 690Z" fill="#fff"/>
+<path d="M500 690 C580 640 640 700 640 740 C580 770 530 740 500 690Z" fill="#fff"/>
+<ellipse cx="500" cy="690" rx="30" ry="25" fill="#fff"/>
+
+</g>
+</svg>

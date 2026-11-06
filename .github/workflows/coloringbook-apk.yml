@@ -38,7 +38,8 @@ jobs:
         run: |
           cp coloringbook/build/outputs/apk/release/*.apk ColoringBook.apk
           gh release delete apk-latest --cleanup-tag --yes || true
+          { cat coloringbook/RELEASE_NOTES.md; printf '\nBuild %s, commit %s.\n' "$GITHUB_RUN_NUMBER" "$GITHUB_SHA"; } > release-notes.md
           gh release create apk-latest ColoringBook.apk \
             --target "$GITHUB_SHA" \
             --title "Coloring Book APK (latest)" \
-            --notes "Android build of the coloring book, rebuilt from the same web/ folder that powers the website. Download ColoringBook.apk on your phone and open it; you may need to allow installs from your browser. Build $GITHUB_RUN_NUMBER, commit $GITHUB_SHA."
+            --notes-file release-notes.md

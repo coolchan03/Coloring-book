@@ -11,7 +11,13 @@ import os
 PAGES = os.path.join(os.path.dirname(__file__), "..", "web", "pages")
 EXT = {".svg", ".png", ".jpg", ".jpeg", ".webp"}
 # Categories listed here come first, in this order; any others follow alphabetically.
-ORDER = ["easy", "halloween", "thanksgiving", "christmas", "easter", "other-holidays", "prehistoric-animals"]
+ORDER = ["easy", "cute-animals", "ocean", "space", "food", "vehicles", "birthday", "halloween", "thanksgiving",
+         "christmas", "easter", "other-holidays", "nature", "animals", "scenes", "patterns", "mandalas",
+         "prehistoric-animals"]
+ICONS = {"easy": "🌈", "cute-animals": "🐻", "ocean": "🐙", "space": "🚀", "food": "🍕", "vehicles": "🚂",
+         "birthday": "🎂", "halloween": "🎃", "thanksgiving": "🦃", "christmas": "🎄", "easter": "🐰",
+         "other-holidays": "💝", "nature": "🌻", "animals": "🦋", "scenes": "🏡", "patterns": "🔷",
+         "mandalas": "🌀", "prehistoric-animals": "🦕"}
 
 
 def title(name):
@@ -25,7 +31,7 @@ for cat in sorted(os.listdir(PAGES), key=lambda c: (ORDER.index(c) if c in ORDER
         continue
     files = sorted(f for f in os.listdir(folder) if os.path.splitext(f)[1].lower() in EXT)
     if files:
-        cats.append({"id": cat, "name": title(cat),
+        cats.append({"id": cat, "name": title(cat), "icon": ICONS.get(cat, "🎨"),
                      "pages": [{"title": title(f), "file": f"{cat}/{f}"} for f in files]})
 
 with open(os.path.join(PAGES, "manifest.json"), "w") as fh:

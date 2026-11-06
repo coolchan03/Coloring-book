@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="1000" height="800">
+<rect width="1000" height="800" fill="#fff"/>
+<g fill="none" stroke="#000" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+<path d="M500.0 50.0 L545.3 231.0 L675.0 96.9 L623.7 276.3 L803.1 225.0 L669.0 354.7 L850.0 400.0 L669.0 445.3 L803.1 575.0 L623.7 523.7 L675.0 703.1 L545.3 569.0 L500.0 750.0 L454.7 569.0 L325.0 703.1 L376.3 523.7 L196.9 575.0 L331.0 445.3 L150.0 400.0 L331.0 354.7 L196.9 225.0 L376.3 276.3 L325.0 96.9 L454.7 231.0Z" fill="#fff"/>
+<path d="M500.0 150.0 L532.4 279.3 L625.0 183.5 L588.4 311.6 L716.5 275.0 L620.7 367.6 L750.0 400.0 L620.7 432.4 L716.5 525.0 L588.4 488.4 L625.0 616.5 L532.4 520.7 L500.0 650.0 L467.6 520.7 L375.0 616.5 L411.6 488.4 L283.5 525.0 L379.3 432.4 L250.0 400.0 L379.3 367.6 L283.5 275.0 L411.6 311.6 L375.0 183.5 L467.6 279.3Z" fill="#fff"/>
+<path d="M500.0 250.0 L519.4 327.6 L575.0 270.1 L553.0 347.0 L629.9 325.0 L572.4 380.6 L650.0 400.0 L572.4 419.4 L629.9 475.0 L553.0 453.0 L575.0 529.9 L519.4 472.4 L500.0 550.0 L480.6 472.4 L425.0 529.9 L447.0 453.0 L370.1 475.0 L427.6 419.4 L350.0 400.0 L427.6 380.6 L370.1 325.0 L447.0 347.0 L425.0 270.1 L480.6 327.6Z" fill="#fff"/>
+<ellipse cx="500" cy="400" rx="60" ry="60" fill="#fff"/>
+<ellipse cx="500" cy="400" rx="28" ry="28"/>
+<g transform="rotate(0.000 500 400)"><ellipse cx="500" cy="90" rx="14" ry="14"/>
+</g>
+<g transform="rotate(30.000 500 400)"><ellipse cx="500" cy="90" rx="14" ry="14"/>
+</g>
+<g transform="rotate(60.000 500 400)"><ellipse cx="500" cy="90" rx="14" ry="14"/>
+</g>
+<g transform="rotate(90.000 500 400)"><ellipse cx="500" cy="90" rx="14" ry="14"/>
+</g>
+<g transform="rotate(120.000 500 400)"><ellipse cx="500" cy="90" rx="14" ry="14"/>
+</g>
+<g transform="rotate(150.000 500 400)"><ellipse cx="500" cy="90" rx="14" ry="14"/>
+</g>
+<g transform="rotate(180.000 500 400)"><ellipse cx="500" cy="90" rx="14" ry="14"/>
+</g>
+<g transform="rotate(210.000 500 400)"><ellipse cx="500" cy="90" rx="14" ry="14"/>
+</g>
+<g transform="rotate(240.000 500 400)"><ellipse cx="500" cy="90" rx="14" ry="14"/>
+</g>
+<g transform="rotate(270.000 500 400)"><ellipse cx="500" cy="90" rx="14" ry="14"/>
+</g>
+<g transform="rotate(300.000 500 400)"><ellipse cx="500" cy="90" rx="14" ry="14"/>
+</g>
+<g transform="rotate(330.000 500 400)"><ellipse cx="500" cy="90" rx="14" ry="14"/>
+</g>
+
+</g>
+</svg>

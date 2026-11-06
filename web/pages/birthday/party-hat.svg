@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="1000" height="800">
+<rect width="1000" height="800" fill="#fff"/>
+<g fill="none" stroke="#000" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+<path d="M500 120 L260 700 H740Z" fill="#fff"/>
+<clipPath id="m6"><path d="M500 120 L260 700 H740Z"/></clipPath><g clip-path="url(#m6)"><path d="M200 610 l35 -35 l35 35 l35 -35 l35 35 l35 -35 l35 35 l35 -35 l35 35 l35 -35 l35 35 l35 -35 l35 35"/>
+<path d="M200 470 q40 -45 80 0 t80 0 t80 0 t80 0 t80 0"/>
+<ellipse cx="440" cy="660" rx="18" ry="18"/>
+<ellipse cx="570" cy="540" rx="18" ry="18"/>
+<ellipse cx="500" cy="380" rx="18" ry="18"/>
+<ellipse cx="480" cy="290" rx="14" ry="14"/>
+</g>
+<ellipse cx="500" cy="110" rx="45" ry="45" fill="#fff"/>
+<path d="M200 700 H800"/>
+<path d="M150.0 186.0 L158.8 207.9 L182.3 209.5 L164.3 224.6 L170.0 247.5 L150.0 235.0 L130.0 247.5 L135.7 224.6 L117.7 209.5 L141.2 207.9Z"/>
+<path d="M860.0 232.0 L867.1 250.3 L886.6 251.3 L871.4 263.7 L876.5 282.7 L860.0 272.0 L843.5 282.7 L848.6 263.7 L833.4 251.3 L852.9 250.3Z"/>
+
+</g>
+</svg>
