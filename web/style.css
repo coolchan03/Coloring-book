@@ -14,11 +14,7 @@ button.icon{font-size:18px;line-height:1;padding:6px 10px}
 button.primary{background:var(--accent);border-color:var(--accent);color:#fff}
 #menuBtn{display:none}
 #sidebar{grid-area:s;overflow:auto;padding:12px;background:var(--panel);border-right:1px solid var(--line)}
-#sidebar h2,#sidebar summary{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 6px}
-.thumbs{margin-top:6px;display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.thumb{padding:4px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;background:#fff;color:#222}
-.thumb img{width:100%;aspect-ratio:5/4;object-fit:contain}
-.thumb.active{outline:2px solid var(--accent)}
+#sidebar h2{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:14px 0 6px}
 .filebtn{display:block;text-align:center;border:1px dashed var(--accent);border-radius:8px;padding:10px;cursor:pointer;color:var(--accent)}
 .hint{font-size:12px;color:var(--muted);line-height:1.4}
 .row{display:flex;align-items:center;gap:8px}
@@ -44,14 +40,8 @@ input[type=color]{width:38px;height:32px;padding:0;border:1px solid var(--line);
   #saveBtn{padding:6px 8px}
   header h1{font-size:15px}
 }
-#sidebar summary{cursor:pointer;margin:12px 0 4px}
-#sidebar details{border-bottom:1px solid var(--line);padding-bottom:8px}
-#sidebar summary{font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:600}
-.thumbwrap{position:relative}
-.thumbwrap .thumb{width:100%}
 .del{position:absolute;top:2px;right:2px;width:22px;height:22px;padding:0;line-height:1;border-radius:50%;font-size:15px;opacity:.85}
 .upload select{flex:1;min-width:0;font:inherit;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:4px}
-.upload{margin-bottom:8px}
 
 /* launcher */
 #home{display:none;grid-area:o;overflow:auto;padding:20px;min-height:0}
@@ -130,3 +120,10 @@ body.home #sidebar,body.home #stage,body.home #tools,body.home .editor-only{disp
 
 #tools,#stage,#home,header{min-width:0}
 #tools .group{min-width:0}
+
+/* sidebar panels, toast, pager */
+.panel{margin-bottom:14px}
+#toast{position:fixed;top:58px;right:14px;z-index:9;background:rgba(30,30,30,.88);color:#fff;padding:6px 12px;border-radius:16px;font-size:13px;opacity:0;transform:translateY(-6px);transition:opacity .2s,transform .2s;pointer-events:none}
+#toast.show{opacity:1;transform:none}
+#prevBtn,#nextBtn{font-size:22px;padding:2px 10px}
+@media (max-width:760px){body:not(.home) #pageTitle{display:none}}

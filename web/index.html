@@ -4,34 +4,42 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Coloring Book</title>
+<meta name="theme-color" content="#f4f1ea">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header>
   <button id="homeBtn" class="icon editor-only" title="Home" aria-label="Home">🏠</button>
-  <button id="menuBtn" class="icon editor-only" title="Pages" aria-label="Pages">☰</button>
+  <button id="menuBtn" class="icon editor-only" title="Picture settings" aria-label="Picture settings">⚙️</button>
+  <button id="prevBtn" class="icon editor-only" title="Previous picture" aria-label="Previous picture">‹</button>
   <h1 id="pageTitle">Coloring Book</h1>
+  <button id="nextBtn" class="icon editor-only" title="Next picture" aria-label="Next picture">›</button>
   <div class="spacer"></div>
   <button id="undoBtn" class="icon editor-only" title="Undo (Ctrl+Z)" aria-label="Undo">↶</button>
   <button id="redoBtn" class="icon editor-only" title="Redo (Ctrl+Shift+Z)" aria-label="Redo">↷</button>
   <button id="clearBtn" class="icon editor-only" title="Clear coloring" aria-label="Clear">🗑</button>
+  <button id="shareBtn" class="icon editor-only" title="Share" aria-label="Share" hidden>📤</button>
   <button id="saveBtn" class="primary editor-only" title="Download as PNG">Save PNG</button>
 </header>
 
 <aside id="sidebar">
-  <div class="upload">
+  <section class="panel">
+    <h2>Line art</h2>
+    <label class="row small" for="threshold">White cut-off <span id="thresholdVal">235</span></label>
+    <input id="threshold" type="range" min="120" max="254" value="235">
+    <p class="hint">Anything lighter than the cut-off becomes see-through, so you can color behind the lines. Photos work best with a lower cut-off.</p>
+  </section>
+  <section class="panel">
     <h2>Add your own picture</h2>
     <label class="row small">Save in <select id="uploadCat"></select></label>
     <label class="filebtn">Upload image(s)…
       <input id="fileInput" type="file" accept="image/*" multiple hidden>
     </label>
-    <label class="row small" for="threshold">White cut-off <span id="thresholdVal">235</span></label>
-    <input id="threshold" type="range" min="120" max="254" value="235">
-    <p class="hint">Anything lighter than the cut-off becomes see-through, so you can color behind the lines. Photos work best with a lower cut-off. Your pictures and coloring are kept in this browser only.</p>
-  </div>
-  <div id="mine"></div>
-  <div id="library"></div>
+    <p class="hint">Your pictures and coloring are kept in this browser only.</p>
+  </section>
   <p class="hint credits">Starter pages are original and public domain (CC0). See <code>pages/README.md</code> to add more.</p>
 </aside>
 
@@ -57,10 +65,12 @@
     <label class="row small">Size <input id="size" type="range" min="1" max="80" value="14"></label>
   </div>
   <div class="group palette" id="palette"></div>
+  <div class="group palette" id="recentColors" aria-label="Recent colors" hidden></div>
   <div class="group">
     <input id="customColor" type="color" value="#e63946" title="Custom color">
   </div>
 </footer>
-<script src="app.js"></script>
+<div id="toast" role="status" aria-live="polite"></div>
+<script type="module" src="app.js"></script>
 </body>
 </html>

@@ -3,7 +3,6 @@ package io.github.coolchan03.coloringbook
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -45,14 +44,15 @@ class MainActivity : Activity() {
             settings.domStorageEnabled = true        // also enables IndexedDB for saved pictures and progress
             settings.allowFileAccess = false
             settings.allowContentAccess = false
+            settings.setSupportZoom(false)
             addJavascriptInterface(Bridge(), "AndroidBridge")
             webViewClient = object : WebViewClient() {
                 override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? =
                     loader.shouldInterceptRequest(request.url)
 
-                override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean = false
-
-                override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) = Unit
+                // The page talks to the app through AndroidBridge, so it may only ever show our own bundled files.
+                override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean =
+                    request.url.host != APP_HOST
             }
             webChromeClient = object : WebChromeClient() {
                 override fun onShowFileChooser(
@@ -102,13 +102,25 @@ class MainActivity : Activity() {
     }
 
     override fun onPause() {
-        webView.onPause()                            // lets the page's pagehide/visibility handlers save progress
+        // Save the page's coloring right away; the WebView itself is only paused once the app has fully stopped.
+        webView.evaluateJavascript("window.cbFlush && window.cbFlush()", null)
         super.onPause()
+    }
+
+    override fun onStop() {
+        webView.onPause()
+        super.onStop()
     }
 
     override fun onResume() {
         super.onResume()
         webView.onResume()
+    }
+
+    override fun onDestroy() {
+        (webView.parent as? ViewGroup)?.removeView(webView)
+        webView.destroy()
+        super.onDestroy()
     }
 
     // The shared page keeps its screens (launcher, category, coloring page) in browser history,
@@ -161,7 +173,8 @@ class MainActivity : Activity() {
     }
 
     private companion object {
-        const val START_URL = "https://appassets.androidplatform.net/index.html"
+        const val APP_HOST = "appassets.androidplatform.net"
+        const val START_URL = "https://$APP_HOST/index.html"
         const val REQUEST_FILE = 1
     }
 }

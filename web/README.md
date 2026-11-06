@@ -13,4 +13,12 @@ line art, so the ink always stays on top. Pure static HTML/JS, no build step.
 - Uploads: pick a category (or make a new one), upload one or more images; white becomes transparent and the "White cut-off" slider tunes it. Uploads appear under "★ <category>" in the sidebar and can be deleted with ×.
 - Saving: your uploads and your coloring (on every page) are autosaved in this browser (IndexedDB) and the last page you had open is reopened on reload. Nothing is sent anywhere. Clearing site data or using another browser/device starts fresh.
 - The eraser and Clear only remove your colors; the line art is a separate layer and is never touched.
+- Quality of life: previous/next arrows flip through a category, recently used custom colors are remembered, a "Saved" toast confirms autosave, `[` and `]` change the brush size, and the website can be shared from, installed to a home screen and used offline.
 - Adding pages: see `pages/README.md`.
+
+## Code layout
+- `app.js` – the app: pages, drawing, saving, launcher and navigation.
+- `brushes.js` – brush types and textures (pure drawing code).
+- `storage.js` – the IndexedDB wrapper for your pictures and coloring.
+- `sw.js`, `manifest.webmanifest`, `icon*.png` – offline use and installing the website.
+- `../tests/smoke.cjs` – end-to-end test in headless Chromium (`npm i playwright`, then `node tests/smoke.cjs`).

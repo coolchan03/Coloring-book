@@ -11,6 +11,8 @@ is made transparent in the browser, so any black-on-white line art works as-is.
 
 Prefer line art with **closed outlines** (no gaps), because the bucket fill is bounded by the lines.
 
+Large raster pages are shrunk by `python3 tools/optimize_images.py` (grayscale, at most 1100px), which keeps the app and the download small.
+
 ## Licensing
 
 The starter pages are original works released under CC0. `tools/gen_pages.py` generates mandalas, nature, animals, patterns and scenes; `tools/gen_simple_pages.py` generates the easy and holiday pages, and `tools/gen_more_pages.py` the cute animals, ocean, space, food, vehicles, birthday and extra pages (shared helpers in `tools/pagelib.py`).
