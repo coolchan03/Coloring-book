@@ -2,75 +2,125 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Coloring Book</title>
-<meta name="theme-color" content="#f4f1ea">
+<meta name="theme-color" content="#ffffff">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="style.css">
+<script>try{var t=localStorage.getItem('cb:theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body>
 <header>
-  <button id="homeBtn" class="icon editor-only" title="Home" aria-label="Home">🏠</button>
-  <button id="menuBtn" class="icon editor-only" title="Picture settings" aria-label="Picture settings">⚙️</button>
-  <button id="prevBtn" class="icon editor-only" title="Previous picture" aria-label="Previous picture">‹</button>
+  <button id="homeBtn" class="btn icon editor-only" title="Home" aria-label="Home"><i data-icon="home"></i></button>
+  <button id="menuBtn" class="btn icon editor-only" title="Picture settings" aria-label="Picture settings"><i data-icon="sliders"></i></button>
+  <button id="prevBtn" class="btn icon editor-only" title="Previous picture (←)" aria-label="Previous picture"><i data-icon="chevron-left"></i></button>
   <h1 id="pageTitle">Coloring Book</h1>
-  <button id="nextBtn" class="icon editor-only" title="Next picture" aria-label="Next picture">›</button>
+  <button id="nextBtn" class="btn icon editor-only" title="Next picture (→)" aria-label="Next picture"><i data-icon="chevron-right"></i></button>
   <div class="spacer"></div>
-  <button id="undoBtn" class="icon editor-only" title="Undo (Ctrl+Z)" aria-label="Undo">↶</button>
-  <button id="redoBtn" class="icon editor-only" title="Redo (Ctrl+Shift+Z)" aria-label="Redo">↷</button>
-  <button id="clearBtn" class="icon editor-only" title="Clear coloring" aria-label="Clear">🗑</button>
-  <button id="shareBtn" class="icon editor-only" title="Share" aria-label="Share" hidden>📤</button>
-  <button id="saveBtn" class="primary editor-only" title="Download as PNG">Save PNG</button>
+  <button id="favBtn" class="btn icon editor-only fav" title="Favorite" aria-label="Favorite" aria-pressed="false"><i data-icon="heart"></i></button>
+  <button id="undoBtn" class="btn icon editor-only" title="Undo (Ctrl+Z)" aria-label="Undo"><i data-icon="undo"></i></button>
+  <button id="redoBtn" class="btn icon editor-only" title="Redo (Ctrl+Shift+Z)" aria-label="Redo"><i data-icon="redo"></i></button>
+  <button id="saveBtn" class="btn primary editor-only" title="Download as PNG (Ctrl+S)"><i data-icon="download"></i><span>Save PNG</span></button>
+  <button id="themeBtn" class="btn icon" title="Theme" aria-label="Theme"></button>
 </header>
 
-<aside id="sidebar">
+<aside id="sidebar" aria-label="Picture settings">
   <section class="panel">
     <h2>Line art</h2>
-    <label class="row small" for="threshold">White cut-off <span id="thresholdVal">235</span></label>
+    <label class="row between" for="threshold">White cut-off <output id="thresholdVal">235</output></label>
     <input id="threshold" type="range" min="120" max="254" value="235">
     <p class="hint">Anything lighter than the cut-off becomes see-through, so you can color behind the lines. Photos work best with a lower cut-off.</p>
+    <label class="row between" for="gap">Fill gap closing <output id="gapVal">Small</output></label>
+    <input id="gap" type="range" min="0" max="4" step="1" value="1">
+    <p class="hint">Bridges small breaks in the outline so a bucket fill does not leak into the next area.</p>
+  </section>
+  <section class="panel">
+    <h2>Colors</h2>
+    <label class="row between" for="paletteSel">Palette <select id="paletteSel" class="field"></select></label>
+    <p class="hint">Goes well with this color</p>
+    <div class="palette" id="ideas" aria-label="Color ideas"></div>
+  </section>
+  <section class="panel">
+    <h2>This picture</h2>
+    <div class="stack">
+      <button id="favBtn2" class="btn fav editor-only" aria-pressed="false"><i data-icon="heart"></i><span>Add to favorites</span></button>
+      <button id="shareBtn" class="btn" hidden><i data-icon="share"></i><span>Share</span></button>
+      <button id="printBtn" class="btn print-only-web"><i data-icon="print"></i><span>Print</span></button>
+      <button id="printBlankBtn" class="btn print-only-web"><i data-icon="print"></i><span>Print blank page</span></button>
+      <button id="clearBtn" class="btn danger-outline"><i data-icon="trash"></i><span>Clear coloring</span></button>
+    </div>
   </section>
   <section class="panel">
     <h2>Add your own picture</h2>
-    <label class="row small">Save in <select id="uploadCat"></select></label>
-    <label class="filebtn">Upload image(s)…
+    <label class="row between small" for="uploadCat">Save in <select id="uploadCat" class="field"></select></label>
+    <label class="filebtn"><i data-icon="image"></i> Upload image(s)…
       <input id="fileInput" type="file" accept="image/*" multiple hidden>
     </label>
     <p class="hint">Your pictures and coloring are kept in this browser only.</p>
+  </section>
+  <section class="panel">
+    <h2>Your data</h2>
+    <div class="stack">
+      <button id="backupBtn" class="btn"><i data-icon="archive"></i><span>Back up everything</span></button>
+      <label class="btn"><i data-icon="upload"></i><span>Restore a backup…</span>
+        <input id="restoreInput" type="file" hidden>
+      </label>
+    </div>
+  </section>
+  <section class="panel">
+    <h2>Appearance</h2>
+    <div class="seg" id="themeSeg" role="group" aria-label="Theme">
+      <button class="btn" data-theme="auto">Auto</button>
+      <button class="btn" data-theme="light">Light</button>
+      <button class="btn" data-theme="dark">Dark</button>
+    </div>
+    <button id="helpBtn" class="btn stackgap"><i data-icon="keyboard"></i><span>Keyboard shortcuts</span></button>
   </section>
   <p class="hint credits">Starter pages are original and public domain (CC0). See <code>pages/README.md</code> to add more.</p>
 </aside>
 
 <section id="home" aria-label="Home"></section>
 
-<main id="stage">
+<main id="stage" data-tool="brush">
   <div id="board">
     <canvas id="color"></canvas>
     <canvas id="stroke"></canvas>
     <canvas id="lines"></canvas>
+    <svg id="guides" aria-hidden="true"></svg>
+  </div>
+  <div id="brushCursor" hidden></div>
+  <div class="zoombar" role="group" aria-label="Zoom">
+    <button id="zoomOut" class="btn icon" title="Zoom out (-)" aria-label="Zoom out"><i data-icon="zoomout"></i></button>
+    <button id="zoomLabel" class="btn" title="Back to fit (0)">100%</button>
+    <button id="zoomIn" class="btn icon" title="Zoom in (+)" aria-label="Zoom in"><i data-icon="zoomin"></i></button>
+    <button id="zoomFit" class="btn icon" title="Fit to screen (0)" aria-label="Fit to screen"><i data-icon="fit"></i></button>
   </div>
 </main>
 
 <footer id="tools">
-  <div class="group" id="toolBtns">
-    <button data-tool="brush" class="tool active" title="Brush (B)">🖌 Brush</button>
-    <button data-tool="fill" class="tool" title="Fill (F)">🪣 Fill</button>
-    <button data-tool="eraser" class="tool" title="Eraser (E): removes your color only, never the line art">🧽 Eraser</button>
-    <button data-tool="pick" class="tool" title="Pick color (I)">💧 Pick</button>
+  <div class="group seg" id="toolBtns" role="group" aria-label="Tools">
+    <button data-tool="brush" class="btn tool active" title="Brush (B)" aria-pressed="true"><i data-icon="brush"></i><span>Brush</span></button>
+    <button data-tool="fill" class="btn tool" title="Bucket fill (F)" aria-pressed="false"><i data-icon="fill"></i><span>Fill</span></button>
+    <button data-tool="eraser" class="btn tool" title="Eraser (E): removes your color only, never the line art" aria-pressed="false"><i data-icon="eraser"></i><span>Eraser</span></button>
+    <button data-tool="pick" class="btn tool" title="Pick color (I, or Alt+click)" aria-pressed="false"><i data-icon="pick"></i><span>Pick</span></button>
+    <button data-tool="pan" class="btn tool" title="Hand: drag to move around when zoomed in (H, or hold Space)" aria-pressed="false"><i data-icon="hand"></i><span>Hand</span></button>
   </div>
-  <div class="group chips" id="brushBtns" aria-label="Brush type"></div>
+  <div class="group chips" id="brushBtns" role="group" aria-label="Brush type"></div>
   <div class="group">
-    <label class="row small">Size <input id="size" type="range" min="1" max="80" value="14"></label>
+    <label class="row small" for="size">Size</label>
+    <input id="size" type="range" min="1" max="80" value="14"><output id="sizeVal">14</output>
+    <button id="symBtn" class="btn" title="Symmetry: repeat what you draw around the middle (M)" aria-pressed="false"><i data-icon="symmetry"></i><span id="symLabel">Symmetry</span></button>
   </div>
-  <div class="group palette" id="palette"></div>
-  <div class="group palette" id="recentColors" aria-label="Recent colors" hidden></div>
+  <div class="group palette" id="palette" role="group" aria-label="Colors"></div>
+  <div class="group palette" id="recentColors" role="group" aria-label="Recent colors" hidden></div>
   <div class="group">
-    <input id="customColor" type="color" value="#e63946" title="Custom color">
+    <input id="customColor" type="color" value="#e63946" title="Custom color" aria-label="Custom color">
   </div>
 </footer>
 <div id="toast" role="status" aria-live="polite"></div>
+<img id="printImg" alt="">
 <script type="module" src="app.js"></script>
 </body>
 </html>
